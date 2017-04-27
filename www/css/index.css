@@ -423,6 +423,10 @@ h2{
 
 .progress-bar {
     height: 20px;
+    /*background-color: red;*/
+}
+.progress-bar__primary{
+    background-color: black;
 }
 .menuContainer{
     display: flex;

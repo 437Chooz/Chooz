@@ -351,6 +351,9 @@ function cart(checkbox) {
   else{
     budgetbar.value = budgetbar.value*100/budget;
   }
+  if(budgetbar.value==100){
+    
+  }
   // console.log("rounded price: " + budgetbar.value*100/budget);
 }
 function populateList(title, id) {
