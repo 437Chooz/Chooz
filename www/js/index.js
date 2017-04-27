@@ -232,7 +232,7 @@ var initMap = function (enabled) {
     ]
   });
 
-  var infoWindow = new google.maps.InfoWindow({ map: map });
+  // var infoWindow = new google.maps.InfoWindow({ map: map });
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -582,7 +582,6 @@ var updateFQ = function () {
         console.log(venue.marker.title + ": " + venue.id);
         venues.push(venue);
 
-        infoWindow = new google.maps.InfoWindow({ map: map });
         venue.marker.addListener('click', function () {
 
           var div = document.createElement("DIV");
@@ -610,7 +609,7 @@ var updateFQ = function () {
             }
           }(div));
 
-          infoWindow.setContent(div);
+          infoWindow = new google.maps.InfoWindow({ map: map, content: div });
           infoWindow.open(map, this);
         });
 
