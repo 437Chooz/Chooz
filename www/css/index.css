@@ -419,11 +419,17 @@ h2{
     box-shadow: none; 
     
 }
+
+
+.progress-bar {
+    height: 20px;
+}
 .menuContainer{
     display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 
 .menuDiv{
     height: 500px;
@@ -431,6 +437,9 @@ h2{
 .menuList{
     max-height: 500px;
     overflow: scroll;
+}
+.menulist{
+    
 }
 .cbutton {
   width: 72px;
@@ -499,7 +508,29 @@ h2{
   transform: scale(1, 1);
 }
 
+.circleBtn {
+      display: block;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      border: 1px solid #3EC9FF;
+    background: white;
+    }
 
+.detailStuff{
+    float: right;
+}
+
+.button.detail{
+    float: right;
+    background: #3EC9FF;
+}
 .choozBtn{
-    bottom: 0;
+    width:50px;
+  height:50px;
+  position:absolute;
+  left: 0;
+  right: 0;
+    bottom: 50px;
+  margin: 0 auto;
 }

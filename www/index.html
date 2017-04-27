@@ -11,7 +11,11 @@
     <!--    Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <intercept-url pattern="/favicon.ico" access="ROLE_ANONYMOUS" />
-    <script src="https://www.gstatic.com/firebasejs/3.7.3/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>
+
     <script>
         // Initialize Firebase
         var config = {
@@ -22,6 +26,8 @@
             messagingSenderId: "623847355109"
         };
         firebase.initializeApp(config);
+
+        database = firebase.database();
     </script>
     <!--<script src="lib/angular/angular.min.js"></script>-->
     <style>
@@ -134,16 +140,13 @@
                         <h2> Put those numbers in! </h2>
                         <form action="search.html">
                             <div class="question">
-                                <input type="text" class="zipcode" id="zipcode"><label>Zip Code</label>
-                            </div>
-                            <div class="question">
                                 <input type="text" class="tipNbudget" id="tip"><label>Tip %</label>
                             </div>
                             <div class="question">
                                 <input type="text" class="tipNbudget" id="budget"><label>Budget</label>
                             </div>
                             <br>
-                            <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Get me Restaurants!</ons-button>
+                            <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Let's Chooz</ons-button>
                         </form>
                     </div>
                 </div>
@@ -163,7 +166,7 @@
                 <div class="loginMid">
                     <div class="numContainer">
                         <h2> Put those numbers in! </h2>
-                        <div id="map"></div>
+                        <!-- <div id="map"></div> -->
                         <div class="question">
                             <input type="text" class="zipcode" id="zipcode"><label>Zip Code</label>
                         </div>
@@ -174,7 +177,7 @@
                             <input type="text" class="tipNbudget" id="budget"><label>Budget</label>
                         </div>
                         <br>
-                        <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Get me Restaurants!</ons-button>
+                        <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Let's Chooz</ons-button>
                     </div>
 
                 </div>
@@ -188,17 +191,13 @@
                 <div class="left">
                     <ons-back-button>Back</ons-back-button>
                 </div>
-                <ons-progress-bar value="10"></ons-progress-bar>
-                <div class="center">Budget Bar</div>
+                <div class="center">Restaurants</div>
                 <div class="right">
                     <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
                 </div>
             </ons-toolbar>
             <div id="map"></div>
 
-            <div class="center">Search Restaurant</div> <br>
-            <input type="search" id="restaurant" class="restaurant" placeholder="Type name of the restaurant">
-            <ons-button class="searchBtn" id="searchButton" onclick="search()">Search</ons-button>
         </ons-page>
     </ons-template>
 
@@ -208,20 +207,29 @@
                 <div class="left">
                     <ons-back-button>Back</ons-back-button>
                 </div>
-                <ons-progress-bar value="10"></ons-progress-bar>
                 <div class="center" id="list-title">Budget Bar</div>
                 <div class="right">
                     <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
                 </div>
             </ons-toolbar>
+            <ons-progress-bar value="10"></ons-progress-bar>
             <div class="menuContainer">
-            <div class="menuDiv">
-            <ons-list class="menuList" id="menu-list">
-            </ons-list>
-            </div>
-            <div class="choozBtn">
-                <div class="round-button"><div class="round-button-circle"><a href="http://example.com" class="round-button">Button!!</a></div></div>
-                <button class="w3-button w3-xlarge w3-circle w3-black" onclick="showModal(); chooz()">CHOOZ</button></div>
+                <div class="menuDiv">
+                    <ons-list class="menuList" id="menu-list">
+                    </ons-list>
+                    <ons-popover direction="up" id="popover">
+                        <div style="padding: 10px; text-align: center;float:right;">
+                            <p class="detailStuff" id="detail">
+                            </p>
+                            <p>
+                                <ons-button onclick="hidePopover()">Close</ons-button>
+                            </p>
+                        </div>
+                    </ons-popover>
+                </div>
+                <div class="choozBtn">
+                    <button id="choozButton" class="circleBtn" onclick="showModal(); myNav.pushPage('ordersummary.html')">CHOOZ</button>
+                </div>
             </div>
             <ons-modal direction="up">
                 <div style="text-align: center">
@@ -232,58 +240,86 @@
             </ons-modal>
         </ons-page>
     </ons-template>
+
+    <ons-template id="ordersummary.html">
+        <ons-toolbar>
+            <div class="left">
+                <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center">Order Summary</div>
+            <div class="right">
+                <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
+            </div>
+        </ons-toolbar>
+        <ons-page id="">
+            <ons-list id="ordersummary">
+                <ons-list-header>
+                    Order Summary
+                </ons-list-header>
+                <ons-list-item id="items" class="items">
+
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-template>
+
     <ons-template id="setting.html">
         <ons-toolbar>
-                <div class="left">
-                    <ons-back-button>Back</ons-back-button>
-                </div>
-                <div class="center">Setting</div>
-            </ons-toolbar>
+            <div class="left">
+                <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center">Setting</div>
+        </ons-toolbar>
         <ons-page class="settingPage" id="setting">
             <div class="settingMid">
-            <div class="settingInner">
-                <div style="float:left;"><ons-button class="viewRestaurantBtn">View Restaurant</ons-button></div>
-                <div style="float:right;"><ons-button class="logoutBtn">Log out</ons-button></div>
-            <br>
-                <br>
-                <br>
-                <br>
-                
-                <div class="settingContainer">
-            <table class="settingStuff">
-                <tr>
-                    <th>Zip Code</th>
-                    <th>Tip(%)</th>
-                    <th>Budget</th>
-                </tr>
-                <tr>
-                    <td>63130</td>
-                    <td>12</td>
-                    <td>$12</td>
-                </tr>
-            </table>
-            <br>
-            <ul class="resList">
-                <li>King Doh<ons-button class="detailBtn">Detail</ons-button></li>
-                <li>Ibbys<ons-button class="detailBtn">Detail</ons-button></li>
-            </ul>
-            <table class="settingStuff">
-                <tr>
-                    <th>Email Address</th>
-                    <th>email@google.com</th>
-                </tr>
-                <tr>
-                    <td>Full Name</td>
-                    <td>Name Name</td>
-                </tr>
-                <tr style="text-align: center; margin: 0 auto;">
-                    <td></td>    
-                </tr>
-            </table>
-                <ons-button class="locationReset" onclick="showModal(); resetPassword()">Reset Password</ons-button>
+                <div class="settingInner">
+                    <div style="float:left;">
+                        <ons-button class="viewRestaurantBtn">View Restaurant</ons-button>
                     </div>
-                
-            </div>
+                    <div style="float:right;">
+                        <ons-button class="logoutBtn">Log out</ons-button>
+                    </div>
+                    <br>
+                    <br><br><br>
+                    <div class="settingContainer">
+                        <table class="settingStuff">
+                            <tr>
+                                <th>Zip Code</th>
+                                <th>Tip(%)</th>
+                                <th>Budget</th>
+                            </tr>
+                            <tr>
+                                <td>63130</td>
+                                <td>12</td>
+                                <td>$12</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <ul class="resList">
+                            <li>King Doh
+                                <ons-button class="detailBtn">Detail</ons-button>
+                            </li>
+                            <li>Ibbys
+                                <ons-button class="detailBtn">Detail</ons-button>
+                            </li>
+                        </ul>
+                        <table class="settingStuff">
+
+                            <tr>
+                                <th>Email Address</th>
+                                <th>email@google.com</th>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td>Name Name</td>
+                            </tr>
+                            <tr style="text-align: center; margin: 0 auto;">
+                                <td></td>
+                            </tr>
+                        </table>
+                        <ons-button class="locationReset" onclick="showModal(); resetPassword()">Reset Password</ons-button>
+                    </div>
+                </div>
             </div>
             <ons-modal direction="up">
                 <div style="text-align: center">
@@ -294,30 +330,8 @@
             </ons-modal>
         </ons-page>
     </ons-template>
-    <ons-template id="receipt.html">
-        <ons-dialog id="dialog-3">
-            <div style="text-align: center; padding: 10px;">
-                <p>
-                    <ons-list-item>
-                        <div class="center">
-                            Menu Name
-                        </div>
-                        <div class="center">
-                            Price
-                        </div>
-                    </ons-list-item>
-                    <p>
-
-                        <p>
-                            <ons-button onclick="hideDialog('dialog-3')">Close</ons-button>
-                        </p>
-            </div>
-        </ons-dialog>
-    </ons-template>
-
-
 </body>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD7m5lD3fCCz61cJY6McEyp3tv8WdL3Gg&callback=initMap"
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD7m5lD3fCCz61cJY6McEyp3tv8WdL3Gg"
     type="text/javascript"></script>
 
 </html>
