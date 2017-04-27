@@ -582,6 +582,8 @@ var updateFQ = function () {
         console.log(venue.marker.title + ": " + venue.id);
         venues.push(venue);
 
+        infoWindow = new google.maps.InfoWindow();
+
         venue.marker.addListener('click', function () {
 
           var div = document.createElement("DIV");
@@ -609,7 +611,6 @@ var updateFQ = function () {
             }
           }(div));
 
-          infoWindow = new google.maps.InfoWindow({ map: map });
           infoWindow.setContent(div);
           infoWindow.open(map, this);
         });
