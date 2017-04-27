@@ -96,16 +96,6 @@ var register = function () {
     error_msg.color = "#ff0000";
   }
 };
-// var Location = function(){
-//   console.log('location fn');
-//   if(zipcode){
-//   var locatinOn = false;
-//   console.log('location Off');
-// }else{
-//   var locatinOn = true;
-//   console.log('location On');
-// }
-// };
 
 /*
   get zipcode, tip, and budget amount
@@ -138,13 +128,7 @@ var tipNbudget = function () {
   }
 
   console.log('salestax', salesTax);
-  // getZipcode( function(res) {
-  //   console.log('inside callback');
-  //   console.log(res);
-  //     var tip = document.getElementById('tip').value;
-  //     var budget = document.getElementById('budget').value;
-  //     zipcode = res.long_name;
-  // } );
+
 };
 
 /*
@@ -248,8 +232,6 @@ var initMap = function (enabled) {
           lng: position.coords.longitude
         };
 
-        // infoWindow.setPosition(pos);
-        // infoWindow.setContent('Location found.');
         map.setCenter(pos);
         updateFQ();
       }, function () {
@@ -301,7 +283,6 @@ function menulist(title, id) {
     menu_xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         var menu_response = JSON.parse(menu_xhttp.responseText).response;
-        // console.log(menu_response);
         if (menu_response.menu.menus.count != 0) {
           var menu_entries_array = menu_response.menu.menus.items[0].entries.items;
           var menu_entries_dict = {};
@@ -319,57 +300,19 @@ function menulist(title, id) {
     populateList(title, id);
   }
 };
-// function openDetail(node) {
-//   var div = document.getElementById('detail');
-//   var p = document.createElement("p");
-//   var br = document.createElement("br");
-//   var price = node.id;
-//   var taxPrice = (1 + tax / 100) * price;
-//   var tipPrice = (price * tip / 100);
-//   console.log("tipPrice: " + tipPrice);
-//   var totalPrice = taxPrice + tipPrice;
-//   p.appendChild(document.createTextNode(node.id));
-//   p.appendChild(br);
-//   p.appendChild(document.createTextNode("tax applied: " + taxPrice));
-//   p.appendChild(br);
-//   p.appendChild(document.createTextNode("tip: " + tipPrice));
-//   p.appendChild(br);
-//   p.appendChild(document.createTextNode("Total: " + totalPrice));
-//   div.appendChild(p);
-//   document
-//     .getElementById('popover')
-//     .show(node);
-// }
-function showDetail(target) {
-  // var div = document.getElementById('popdetail');
-  // var p1 = document.createElement("p");
-  // var p2 = document.createElement("p");
-  // var p3 = document.createElement("p");
-  // var p4 = document.createElement("p");
-  // var br = document.createElement("br");
-  var price = finalPrice;
-  console.log("finalPrice: " + price);
-  var taxPrice = (1 + tax / 100) * price;
-  console.log("tax: " + tax);
-  console.log("tax/100: " + tax / 100);
-  console.log("taxPrice: " + taxPrice.toFixed(2));
-  var tipPrice = (price * tip / 100);
-  console.log("tip: " + tip);
-  console.log("tipPrice: " + tipPrice);
-  var totalPrice = taxPrice + tipPrice;
 
-  console.log("totalPrice: " + totalPrice);
-  // p1.appendChild(document.createTextNode(price));
-  // div.appendChild(p1);
-  // div.appendChild(br);
-  // p2.appendChild(document.createTextNode("tax applied: " + taxPrice));
-  // div.appendChild(p2);
-  // div.appendChild(br);
-  // p3.appendChild(document.createTextNode("tip: " + tipPrice));
-  // div.appendChild(p3);
-  // div.appendChild(br);
-  // p4.appendChild(document.createTextNode("Total: " + totalPrice));
-  // div.appendChild(p4);
+function showDetail(target) {
+  var price = finalPrice;
+  // console.log("finalPrice: " + price);
+  var taxPrice = (1 + tax / 100) * price;
+  // console.log("tax: " + tax);
+  // console.log("tax/100: " + tax / 100);
+  // console.log("taxPrice: " + taxPrice.toFixed(2));
+  var tipPrice = (price * tip / 100);
+  // console.log("tip: " + tip);
+  // console.log("tipPrice: " + tipPrice);
+  var totalPrice = taxPrice + tipPrice;
+  // console.log("totalPrice: " + totalPrice);
   var originalPrice = document.getElementById('originalPrice');
   originalPrice.innerHTML = "original price: " + price.toFixed(2);
   var taxedPrice = document.getElementById('taxPrice');
@@ -390,15 +333,25 @@ function cart(checkbox) {
   var originalPrice = parseFloat(checkbox.value);
   if (checkbox.checked) {
     finalPrice += originalPrice;
-    console.log("finalPrice plus: " + finalPrice);
+    // console.log("finalPrice plus: " + finalPrice);
   }
   else {
-    finalPrice -= originalPrice;
-    console.log("finalPrice minus: " + finalPrice);
+    if(finalPrice-originalPrice<0){
+      finalPrice=0;
+    }
+    else{
+      finalPrice -= originalPrice;
+    }
+    // console.log("finalPrice minus: " + finalPrice);
   }
   budgetbar.value = Math.round(finalPrice);
-  budgetbar.value = budgetbar.value*100/budget;
-  console.log("rounded price: " + budgetbar.value*100/budget);
+  if(budgetbar.value>budget){
+    budgetbar.value = 100;
+  }
+  else{
+    budgetbar.value = budgetbar.value*100/budget;
+  }
+  // console.log("rounded price: " + budgetbar.value*100/budget);
 }
 function populateList(title, id) {
   // Populate the list with menu items
@@ -411,17 +364,6 @@ function populateList(title, id) {
 
   document.getElementById('list-title').innerHTML = title;
   var menuList = document.getElementById('menu-list');
-  // var budgetbar = document.getElementById('budgetbar');
-  // var detail = document.createElement("ons-button");
-  // detail.className = "detail"
-  // detail.id = "detailButton";
-  // detail.appendChild(document.createTextNode("DETAIL"));
-  // detail.addEventListener("click", function(){
-  //   showDetail(detail);
-  // });
-  // budgetbar.appendChild(detail);
-
-  // menuList.appendChild(detail);
   for (var menu_type in venue_dict[id]) {
     var menu_header = document.createElement('ons-list-header');
     menu_header.innerText = menu_type;
@@ -435,12 +377,12 @@ function populateList(title, id) {
       var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
       
       var taxPrice = (1 + tax / 100) * menu.price;
-      console.log("taxPrice: " + taxPrice.toFixed(2));
+      // console.log("taxPrice: " + taxPrice.toFixed(2));
       var tipPrice = (menu.price * tip / 100);
-      console.log("tipPrice: " + tipPrice);
+      // console.log("tipPrice: " + tipPrice);
       var totalPrice = taxPrice + tipPrice;
 
-      console.log("totalPrice: " + totalPrice.toFixed(2));
+      // console.log("totalPrice: " + totalPrice.toFixed(2));
       if (totalPrice.toFixed(2) > budget * 1.00) {
         var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name.fontcolor("red") + "</div><div class='right'>" + newMenuPrice + "</div>"
       }
@@ -568,6 +510,7 @@ ons.ready(function () {
       }
     };
     if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary') {
+      
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
@@ -576,6 +519,11 @@ ons.ready(function () {
       };
     }
     if (page.id === 'menulist') {
+      if(page.id==='menulist'){
+        console.log('menu page');
+        finalPrice=0.0;
+        console.log("reset finalPrice: "+finalPrice);
+      }
       page.querySelector('#choozButton').onclick = function () {
         document.querySelector('#myNav').pushPage('ordersummary.html', { data: { title: 'OrderSummary' } })
           .then(function () {
