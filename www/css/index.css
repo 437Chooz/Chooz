@@ -691,3 +691,8 @@ h2{
     border: 1px solid white;
     background: transparent;
 }
+
+.pastOrder{
+    font-style: bold;
+    text-align: center;
+}

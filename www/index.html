@@ -386,7 +386,7 @@
             <div class="center">Setting</div>
         </ons-toolbar>
         <ons-page class="settingPage" id="setting">
-            <div class="settingMid">
+            <div class="settingMid" id="settingMid">
                 <div class="settingInner">
                     <div style="float:left;">
                         <ons-button class="viewRestaurantBtn" id="viewRestaurantButton" onclick="myNav.pushPage('search.html')">View Restaurant</ons-button>
@@ -396,38 +396,26 @@
 
                     </div>
                     <br>
-                    <br><br><br>
+                    <br><br>
                     <div class="settingContainer">
                         <table class="settingStuff">
                             <tr>
                                 <th>Zip Code</th>
-                                <th>Tip(%)</th>
+                                <th>Tip</th>
                                 <th>Budget</th>
                             </tr>
                             <tr>
-                                <td>63130</td>
-                                <td>12</td>
-                                <td>$12</td>
+                                <td id="settings_zipcode"></td>
+                                <td id="settings_tip"></td>
+                                <td id="settings_budget"></td>
                             </tr>
                         </table>
                         <br>
-                        <ul class="resList">
-                            <li>King Doh
-                                <ons-button class="detailBtn">Detail</ons-button>
-                            </li>
-                            <li>Ibbys
-                                <ons-button class="detailBtn">Detail</ons-button>
-                            </li>
-                        </ul>
                         <table class="settingStuff">
 
                             <tr>
-                                <th>Email Address</th>
-                                <th>email@google.com</th>
-                            </tr>
-                            <tr>
-                                <td>Full Name</td>
-                                <td>Name Name</td>
+                                <th>Email</th>
+                                <td id="email"></td>
                             </tr>
                             <tr style="text-align: center; margin: 0 auto;">
                                 <td></td>
