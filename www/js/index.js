@@ -454,8 +454,7 @@ function populateList(title, id) {
     }
   }
   document.getElementById('budgetbar').addEventListener('click', function () {
-    alert('Current position: ' + document.getElementById('budgetbar').position);
-    alert('Current value: ' + document.getElementById('budgetbar').value);
+    showDetail(this);
   });
   button.addEventListener("click", function () {
     showDetail(this);
