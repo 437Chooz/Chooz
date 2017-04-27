@@ -68,7 +68,7 @@
                         <button class="facebookBtn" onclick="facebookLogin()">
                             <i class="fa fa-facebook-official" style="font-size:36px"></i>
                         </button><br><br>
-                        <ons-button class="regBtn" id="registerButton" onclick="myNav.pushPage('register.html');">Not a Member? Click Here to Register</ons-button>
+                        <ons-button class="regBtn" onclick="myNav.pushPage('register.html');">Not a Member? Click Here to Register</ons-button>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                         <input type="password" class="reg" id="reg_re_password" placeholder="Confirm Password"><br>
                         <font color=#badcef size="2" id="reg_error_msg">Password does not match</font><br>
 
-                        <ons-button class="regConfirm" onclick="register()">Register</ons-button>
+                        <ons-button id="registerButton" class="regConfirm" onclick="register()">Register</ons-button>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
                     <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
                 </div>
             </ons-toolbar>
-            <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
+            <ons-progress-bar id="budgetbar" value="0" max="100"></ons-progress-bar>
             <div class="menuContainer">
                 <div class="menuDiv">
                     <ons-list class="menuList" id="menu-list">

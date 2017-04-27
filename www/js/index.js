@@ -387,7 +387,6 @@ finalPrice = 0.0;
 function cart(checkbox) {
   // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
   var budgetbar = document.getElementById('budgetbar');
-
   var originalPrice = parseFloat(checkbox.value);
   if (checkbox.checked) {
     finalPrice += originalPrice;
@@ -398,7 +397,7 @@ function cart(checkbox) {
     console.log("finalPrice minus: " + finalPrice);
   }
   budgetbar.value = Math.round(finalPrice);
-  console.log("rounded price: " + budgetbar.value);
+  console.log("rounded price: " + budgetbar.value*100/budget);
 }
 function populateList(title, id) {
   // Populate the list with menu items
@@ -534,13 +533,12 @@ ons.ready(function () {
   document.addEventListener('init', function (event) {
     var page = event.target;
     console.log('event listener added', page);
-
-    if (page.id === 'login') {
-      page.querySelector('#registerButton').onclick = function () {
-        document.querySelector('#myNav').pushPage('register.html', { data: { title: 'Register' } });
-      };
-    } else if (page.id === 'register') {
+    
+    if (page.id === 'register') {
       page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+      page.querySelector('#registerButton').onclick = function () {
+        document.querySelector('#myNav').pushPage('login.html', { data: { title: 'login' } });
+      };
     }
     if (page.id === 'login') {
       page.querySelector('#anonLoginButton').onclick = function () {
