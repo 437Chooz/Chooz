@@ -236,7 +236,7 @@ var initMap = function (enabled) {
     ]
   });
 
-  var infoWindow = new google.maps.InfoWindow({ map: map });
+  var infoWindow = new google.maps.InfoWindow();
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -431,30 +431,11 @@ function populateList(title, id) {
     for (var i = 0; i < venue_dict[id][menu_type].length; i++) {
       var menu = venue_dict[id][menu_type][i];
       var menu_item = document.createElement('ons-list-item');
-      var form = document.createElement('form');
-      var input = document.createElement('input');
-      input.type = "checkbox";
-      input.id = [menu.name, menu.price];
-      input.value = menu.price;
-      input.className = "menulist";
-      form.appendChild(input);
-      form.appendChild(document.createTextNode(menu.name + " " + menu.price));
+      var newMenuName = menu.name.replace(/ /g, "@");
+      var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
+      var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+newMenuPrice+"</div>"
+      menu_item.innerHTML += html_text;
 
-      // var detail = document.createElement("ons-button");
-      // detail.className = "detail"
-      // detail.id = menu.price;
-      // detail.appendChild(document.createTextNode("DETAIL"));
-      // form.appendChild(detail);
-      input.addEventListener('click', function (form) {
-        return function () {
-          console.log(this);
-          cart(form.childNodes[0]);
-          // openDetail(form.childNodes[2]);
-          // var div = document.getElementById('detail');
-          // div.removeChild(div.childNodes[0]);
-        }
-      }(form));
-      menu_item.appendChild(form);
       menuList.appendChild(menu_item);
     }
   }
@@ -465,21 +446,33 @@ function populateList(title, id) {
 }
 
 function chooz() {
-  var items = document.getElementById('items');
-  var menu = [];
-  menu = document.getElementsByClassName("menulist");
-  var i;
+  var orderSummary = document.getElementById('orderSummary');
+  var menu = document.getElementsByClassName("menulist");
+  var restaurant = document.getElementById('list-title').innerHTML;
+  const userId = firebase.auth().currentUser.uid;
 
-  var br = document.createElement("br");
-  for (i = 0; i < menu.length; i++) {
+  var orders = [];
+  for (var i = 0; i < menu.length; i++) {
     if (menu[i].checked) {
-      var div = document.createElement("div");
-      var menuinfo = menu[i].id.replace(",", ": ");
-      console.log(menuinfo);
-      div.appendChild(document.createTextNode(menuinfo));
-      items.appendChild(div);
+      var menu_item = document.createElement('ons-list-item');
+      var menuInfo = menu[i].id.replace(/@/g, " ");
+      var menuPrice = menu[i].value;
+      var html_text = "<div class='center'>"+menuInfo+"</div><div class='right'>"+menuPrice+"</div>"
+
+      menu_item.innerHTML = html_text;
+      orderSummary.appendChild(menu_item);
+
+      var order = {"menu": menuInfo, "price": menuPrice};
+      orders.push(order);
+
     }
   }
+
+  firebase.database().ref('users/' + userId).set({
+        orders: orders
+      })
+
+  console.log(orders);
 }
 var showPopover = function (target) {
   document
@@ -658,7 +651,7 @@ var updateFQ = function () {
           id.innerHTML = this.store_id;
           var button = document.createElement("BUTTON");
           button.type = "button";
-          var button_text = document.createTextNode("Click me");
+          var button_text = document.createTextNode("Chooz!");
 
           div.appendChild(s);
           div.appendChild(br);
