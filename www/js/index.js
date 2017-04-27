@@ -468,9 +468,14 @@ function chooz() {
     }
   }
 
+  const dateFull = new Date();
+  const dateToday = 'Order on ' + (dateFull.getMonth() + 1) + ' ' + dateFull.getDate() + ' ' + dateFull.getFullYear();
 
 
-  firebase.database().ref('users/' + userId + '/Order on ' + new Date()).set({
+   var newPostKey = firebase.database().ref().child(dateToday).push().key;
+   console.log(newPostKey);
+
+  firebase.database().ref('users/' + userId + '/'+ dateToday + '/' + newPostKey).update({
         orders: orders
       })
 
