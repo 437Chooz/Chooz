@@ -643,7 +643,7 @@ ons.ready(function () {
           });
       }
     };
-    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary') {
+    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary' ||page.id==='calc.html') {
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
@@ -674,16 +674,6 @@ ons.ready(function () {
             chooz()
           });
       };
-    }
-    if (page.id === 'setting') {
-      page.querySelector('#viewRestaurantButton').onclick = function () {
-        document.querySelector('#myNav')
-          .pushPage('search.html', { data: { title: 'search' } })
-          .then(function () {
-            initMap(enabled);
-            // tipNbudget();
-          });
-      }
     }
   });
 });
@@ -822,24 +812,3 @@ function getRadius(lat1, lon1, lat2, lon2) {
   var d = R * c;
   return Math.round(d * 1000); // meters
 }
-// (function(){   
-
-//   if(btnLogout){
-//   btnLogout.addEventListener('click', e => {
-//     firebase.auth().signOut();
-//   });
-//   }
-
-//   firebase.auth().onAuthStateChanged(firebaseUser => {
-//     if(firebaseUser){
-//       console.log(firebaseUser);
-//       btnLogout.classList.remove('hide');
-//     }
-//     else{
-//       console.log('not logged in');
-//       if(btnLogout){
-//       btnLogout.classList.add('hide');
-//       }
-//     }
-//   });
-// });
