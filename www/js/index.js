@@ -115,7 +115,8 @@ var register = function () {
 var tipNbudget = function () {
   console.log('tip n budget function');
   // Location();
-
+  tip = document.getElementById('tip').value;
+  console.log(tip);
   var zipcode = document.getElementById('zipcode');
   var locationOff = document.body.contains(zipcode);
   var salesTax = 0;
@@ -158,9 +159,11 @@ var getSalesTax = function (zipcode) {
 
   xhr.addEventListener("readystatechange", function () {
     if (this.readyState === 4) {
-      console.log(this);
-      sales_data = JSON.parse(this.responseText);
-      console.log(sales_data);
+      salesdata = JSON.parse(this.responseText);
+      tax = parseFloat(salesdata.charAt(18) + salesdata.charAt(19) + salesdata.charAt(20) + salesdata.charAt(21) + salesdata.charAt(22));
+      console.log(tax);
+      console.log(salesdata);
+      return tax;
     }
   });
 
@@ -318,11 +321,40 @@ function menulist(title, id) {
 function openDetail(node) {
   var div = document.getElementById('detail');
   var p = document.createElement("p");
+  var br = document.createElement("br");
+  var price = node.id;
+  var taxPrice = (1 + tax / 100) * price;
+  var tipPrice = (price * tip / 100);
+  console.log("tipPrice: "+tipPrice);
+  var totalPrice = taxPrice + tipPrice;
   p.appendChild(document.createTextNode(node.id));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("tax applied: " + taxPrice));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("tip: " + tipPrice));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("Total: " + totalPrice));
   div.appendChild(p);
   document
     .getElementById('popover')
     .show(node);
+}
+finalPrice=0.0;
+function cart(node){
+  // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
+  var budgetbar = document.getElementById('budgetbar');
+  console.log("price: "+ node.value);
+  var originalPrice = parseFloat(node.value);
+  if(node.checked){
+    finalPrice +=originalPrice;
+    console.log("finalPrice plus: "+finalPrice);
+  }
+  else{
+    finalPrice -=originalPrice;
+    console.log("finalPrice minus: "+finalPrice);
+  }
+  budgetbar.value = Math.round(finalPrice);
+  console.log("rounded price: "+budgetbar.value);
 }
 function populateList(title, id) {
   // Populate the list with menu items
@@ -347,7 +379,6 @@ function populateList(title, id) {
     }
   }
 }
-
 
 function chooz() {
   var items = document.getElementById('items');

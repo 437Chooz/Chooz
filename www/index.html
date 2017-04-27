@@ -186,8 +186,7 @@
                 <div class="left">
                     <ons-back-button>Back</ons-back-button>
                 </div>
-                <ons-progress-bar value="10"></ons-progress-bar>
-                <div class="center">Budget Bar</div>
+                <div class="center">Restaurants</div>
                 <div class="right">
                     <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
                 </div>
@@ -203,22 +202,19 @@
                 <div class="left">
                     <ons-back-button>Back</ons-back-button>
                 </div>
-                <ons-progress-bar value="10"></ons-progress-bar>
                 <div class="center" id="list-title">Budget Bar</div>
                 <div class="right">
                     <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
                 </div>
             </ons-toolbar>
-
+            <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
             <div class="menuContainer">
                 <div class="menuDiv">
                     <ons-list class="menuList" id="menu-list">
-
                     </ons-list>
                     <ons-popover direction="up" id="popover">
-                        <div style="padding: 10px; text-align: center;">
-                            <p id="detail">
-
+                        <div style="padding: 10px; text-align: center;float:right;">
+                            <p class="detailStuff" id="detail">
                             </p>
                             <p>
                                 <ons-button onclick="hidePopover()">Close</ons-button>
@@ -227,10 +223,7 @@
                     </ons-popover>
                 </div>
                 <div class="choozBtn">
-                    <div class="round-button">
-                        <div class="round-button-circle"><a href="http://example.com" class="round-button">Button!!</a></div>
-                    </div>
-                    <button id="choozButton" class="w3-button w3-xlarge w3-circle w3-black" onclick="showModal(); myNav.pushPage('ordersummary.html')">CHOOZ</button>
+                    <button id="choozButton" class="circleBtn" onclick="showModal(); myNav.pushPage('ordersummary.html')">CHOOZ</button>
                 </div>
             </div>
             <ons-modal direction="up">
@@ -254,14 +247,20 @@
             </div>
         </ons-toolbar>
         <ons-page id="">
-            <ons-list id="ordersummary">
-                <ons-list-header>
-                    Order Summary
-                </ons-list-header>
-                <ons-list-item id="items" class="items">
+            
+            <div class="orderContainer">
+                <div class="orderSummary">
+                    <ons-list id="ordersummary" class="summaryList" style="color:white; background:transparent;">
+                        <ons-list-header style="text-align:center; margin: 0 auto;padding: 0;">
+                            <i class="fa fa-spoon fa-3x" aria-hidden="true" style="color:white;margin:0 auto;text-align:center"></i>   
+                        </ons-list-header>
+                        <ons-list-item id="items" class="items">
 
-                </ons-list-item>
-            </ons-list>
+                        </ons-list-item>
+                    </ons-list>
+                </div>
+            </div>
+            
         </ons-page>
     </ons-template>
 
@@ -333,7 +332,6 @@
         </ons-page>
     </ons-template>
 </body>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD7m5lD3fCCz61cJY6McEyp3tv8WdL3Gg"
-    type="text/javascript"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD7m5lD3fCCz61cJY6McEyp3tv8WdL3Gg" type="text/javascript"></script>
 
 </html>
