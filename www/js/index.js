@@ -383,13 +383,12 @@ function showDetail(target) {
     .show(target);
 }
 finalPrice = 0.0;
-function cart(node) {
+function cart(checkbox) {
   // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
   var budgetbar = document.getElementById('budgetbar');
 
-  console.log("price: " + node.value);
-  var originalPrice = parseFloat(node.value);
-  if (node.checked) {
+  var originalPrice = parseFloat(checkbox.childNodes[0].value);
+  if (checkbox.childNodes[0].checked) {
     finalPrice += originalPrice;
     console.log("finalPrice plus: " + finalPrice);
   }
@@ -435,6 +434,12 @@ function populateList(title, id) {
       var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
       var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+newMenuPrice+"</div>"
       menu_item.innerHTML += html_text;
+      var checkbox = menu_item.childNodes[0];
+      checkbox.addEventListener('click', function(checkbox) {
+        return function() {
+          cart(checkbox);
+        }
+      }(checkbox));
 
       menuList.appendChild(menu_item);
     }
@@ -469,8 +474,7 @@ function chooz() {
   }
 
   if (currentUser === undefined) {
-    // didn't log
-    
+    // didn't log in
   } else {
     firebase.database().ref('users/' + currentUser.uid).set({
             orders: orders
