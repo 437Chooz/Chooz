@@ -384,6 +384,7 @@ function chooz() {
   var items = document.getElementById('items');
   var menu = document.getElementsByClassName("menulist");
   var restaurant = document.getElementById('list-title').innerHTML;
+  const userId = firebase.auth().currentUser.uid;
 
   var orders = [];
   for (var i = 0; i < menu.length; i++) {
@@ -396,8 +397,14 @@ function chooz() {
 
       var order = {"menu": menuInfo, "price": menuPrice};
       orders.push(order);
+
     }
   }
+
+  firebase.database().ref('users/' + userId).set({
+        orders: orders
+      })
+
   console.log(orders);
 }
 var showPopover = function (target) {
