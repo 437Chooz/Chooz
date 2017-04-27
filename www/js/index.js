@@ -371,7 +371,7 @@ function cart(checkbox) {
   }
 
   var taxPrice = (1 + tax / 100) * finalPrice;
-  TaxPrice = taxPrice;
+  TaxPrice = (tax / 100) * finalPrice;
   // console.log("tax: " + tax);
   // console.log("tax/100: " + tax / 100);
   console.log("taxPrice: " + taxPrice);
@@ -395,11 +395,6 @@ function cart(checkbox) {
 function populateList(title, id) {
   // Populate the list with menu items
   var detail = document.getElementById("detail");
-  var button = document.createElement("ons-button");
-  button.className = "detailBtn"
-  button.id = "detailButton";
-  button.appendChild(document.createTextNode("DETAIL"));
-
 
   document.getElementById('list-title').innerHTML = title;
   var menuList = document.getElementById('menu-list');
@@ -442,10 +437,6 @@ function populateList(title, id) {
   document.getElementById('budgetbar').addEventListener('click', function () {
     showDetail(this);
   });
-  button.addEventListener("click", function () {
-    showDetail(this);
-  });
-  detail.appendChild(button);
 }
 
 function chooz() {
@@ -600,7 +591,11 @@ ons.ready(function () {
     if (page.id === 'setting') {
       page.querySelector('#viewRestaurantButton').onclick = function () {
         document.querySelector('#myNav')
-          .pushPage('search.html', { data: { title: 'search' } });
+          .pushPage('search.html', { data: { title: 'search' } })
+          .then(function () {
+            initMap(enabled);
+            // tipNbudget();
+          });
       }
     }
   });
