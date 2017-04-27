@@ -486,9 +486,13 @@ function chooz() {
     }
   }
 
-  firebase.database().ref('users/' + userId).set({
-    orders: orders
-  })
+
+
+
+  firebase.database().ref('users/' + userId + '/Order on ' + new Date()).set({
+        orders: orders
+      })
+
 
   console.log(orders);
 }
