@@ -471,7 +471,6 @@ function chooz() {
   var orderSummary = document.getElementById('orderSummary');
   var menu = document.getElementsByClassName("menulist");
   var restaurant = document.getElementById('list-title').innerHTML;
-  const currentUser = firebase.auth().currentUser;
 
   var orders = [];
   for (var i = 0; i < menu.length; i++) {
@@ -490,24 +489,23 @@ function chooz() {
     }
   }
 
-  const dateFull = new Date();
-  const dateToday = 'Order on ' + (dateFull.getMonth() + 1) + ' ' + dateFull.getDate() + ' ' + dateFull.getFullYear();
 
-
-<<<<<<< HEAD
-   var newPostKey = firebase.database().ref().child(dateToday).push().key;
-   console.log(newPostKey);
-
-  firebase.database().ref('users/' + userId + '/'+ dateToday + '/' + newPostKey).update({
-=======
+  const currentUser = firebase.auth().currentUser;
+  
   if (currentUser === undefined) {
     // didn't log in
   } else {
 
-  firebase.database().ref('users/' + userId + '/Order on ' + new Date()).set({
->>>>>>> origin/master
-        orders: orders
-      })
+    const dateFull = new Date();
+    const dateToday = 'Order on ' + (dateFull.getMonth() + 1) + ' ' + dateFull.getDate() + ' ' + dateFull.getFullYear();
+
+
+    var newPostKey = firebase.database().ref().child(dateToday).push().key;
+    console.log(newPostKey);
+
+    firebase.database().ref('users/' + currentUser.uid + '/'+ dateToday + '/' + newPostKey).update({
+          orders: orders
+        })  
   }
 
   console.log(orders);
