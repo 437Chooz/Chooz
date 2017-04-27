@@ -116,7 +116,8 @@ var tipNbudget = function () {
   console.log('tip n budget function');
   // Location();
   tip = document.getElementById('tip').value;
-  console.log(tip);
+  budget = document.getElementById('budget').value;
+  console.log("tip&budget: " + tip + " " + budget);
   var zipcode = document.getElementById('zipcode');
   var locationOff = document.body.contains(zipcode);
   var salesTax = 0;
@@ -350,7 +351,7 @@ function showDetail(target) {
   console.log("finalPrice: " + price);
   var taxPrice = (1 + tax / 100) * price;
   console.log("tax: " + tax);
-  console.log("tax/100: " + tax/100);
+  console.log("tax/100: " + tax / 100);
   console.log("taxPrice: " + taxPrice.toFixed(2));
   var tipPrice = (price * tip / 100);
   console.log("tip: " + tip);
@@ -370,13 +371,13 @@ function showDetail(target) {
   // p4.appendChild(document.createTextNode("Total: " + totalPrice));
   // div.appendChild(p4);
   var originalPrice = document.getElementById('originalPrice');
-  originalPrice.innerHTML = "original price: "+price;
+  originalPrice.innerHTML = "original price: " + price;
   var taxedPrice = document.getElementById('taxPrice');
-  taxedPrice.innerHTML = "taxed price: "+taxPrice.toFixed(2);
+  taxedPrice.innerHTML = "taxed price: " + taxPrice.toFixed(2);
   var tipedPrice = document.getElementById('tipPrice');
-  tipedPrice.innerHTML = "tip price: "+tipPrice.toFixed(2);
+  tipedPrice.innerHTML = "tip price: " + tipPrice.toFixed(2);
   var totaledPrice = document.getElementById('totalPrice');
-  totaledPrice.innerHTML = "total price: "+totalPrice.toFixed(2);
+  totaledPrice.innerHTML = "total price: " + totalPrice.toFixed(2);
 
   document
     .getElementById('popover')
@@ -433,12 +434,29 @@ function populateList(title, id) {
       var menu_item = document.createElement('ons-list-item');
       var newMenuName = menu.name.replace(/ /g, "@");
       var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
-      var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+newMenuPrice+"</div>"
+      
+      var taxPrice = (1 + tax / 100) * menu.price;
+      console.log("taxPrice: " + taxPrice.toFixed(2));
+      var tipPrice = (menu.price * tip / 100);
+      console.log("tipPrice: " + tipPrice);
+      var totalPrice = taxPrice + tipPrice;
+
+      console.log("totalPrice: " + totalPrice.toFixed(2));
+      if (totalPrice.toFixed(2) > budget * 1.00) {
+        var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name.fontcolor("red") + "</div><div class='right'>" + newMenuPrice + "</div>"
+      }
+      else {
+        var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name + "</div><div class='right'>" + newMenuPrice + "</div>"
+      }
       menu_item.innerHTML += html_text;
 
       menuList.appendChild(menu_item);
     }
   }
+  document.getElementById('budgetbar').addEventListener('click', function () {
+    alert('Current position: ' + document.getElementById('budgetbar').position);
+    alert('Current value: ' + document.getElementById('budgetbar').value);
+  });
   button.addEventListener("click", function () {
     showDetail(this);
   });
@@ -457,20 +475,20 @@ function chooz() {
       var menu_item = document.createElement('ons-list-item');
       var menuInfo = menu[i].id.replace(/@/g, " ");
       var menuPrice = menu[i].value;
-      var html_text = "<div class='center'>"+menuInfo+"</div><div class='right'>"+menuPrice+"</div>"
+      var html_text = "<div class='center'>" + menuInfo + "</div><div class='right'>" + menuPrice + "</div>"
 
       menu_item.innerHTML = html_text;
       orderSummary.appendChild(menu_item);
 
-      var order = {"menu": menuInfo, "price": menuPrice};
+      var order = { "menu": menuInfo, "price": menuPrice };
       orders.push(order);
 
     }
   }
 
   firebase.database().ref('users/' + userId).set({
-        orders: orders
-      })
+    orders: orders
+  })
 
   console.log(orders);
 }
@@ -506,7 +524,6 @@ ons.ready(function () {
     } else if (page.id === 'register') {
       page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
     }
-
     if (page.id === 'login') {
       page.querySelector('#anonLoginButton').onclick = function () {
         document.querySelector('#myNav').pushPage('location.html', { data: { title: 'Location' } });
@@ -533,16 +550,8 @@ ons.ready(function () {
           });
       }
     };
-    if (page.id === 'search') {
+    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary') {
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
-        document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
-          .then(function () {
-            setting();
-          });
-      };
-    }
-    if (page.id === 'menulist') {
-      page.querySelector('#settingButton').onclick = function () {
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
             setting();
