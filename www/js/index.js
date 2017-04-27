@@ -339,6 +339,23 @@ function openDetail(node) {
     .getElementById('popover')
     .show(node);
 }
+finalPrice=0.0;
+function cart(node){
+  // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
+  var budgetbar = document.getElementById('budgetbar');
+  console.log("price: "+ node.value);
+  var originalPrice = parseFloat(node.value);
+  if(node.checked){
+    finalPrice +=originalPrice;
+    console.log("finalPrice plus: "+finalPrice);
+  }
+  else{
+    finalPrice -=originalPrice;
+    console.log("finalPrice minus: "+finalPrice);
+  }
+  budgetbar.value = Math.round(finalPrice);
+  console.log("rounded price: "+budgetbar.value);
+}
 function populateList(title, id) {
   // Populate the list with menu items
   document.getElementById('list-title').innerHTML = title;
@@ -357,6 +374,7 @@ function populateList(title, id) {
       var input = document.createElement('input');
       input.type = "checkbox";
       input.id = [menu.name, menu.price];
+      input.value = menu.price;
       input.className = "menulist";
       form.appendChild(input);
       form.appendChild(document.createTextNode(menu.name + " " + menu.price));
@@ -369,6 +387,7 @@ function populateList(title, id) {
       form.addEventListener('click', function (form) {
         return function () {
           console.log(this);
+          cart(form.childNodes[0]);
           openDetail(form.childNodes[2]);
           var div = document.getElementById('detail');
           div.removeChild(div.childNodes[0]);
