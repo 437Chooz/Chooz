@@ -643,7 +643,7 @@ ons.ready(function () {
           });
       }
     };
-    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary' ||page.id==='calc.html') {
+    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary' ||page.id==='calc') {
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
