@@ -384,7 +384,7 @@ function chooz() {
   var orderSummary = document.getElementById('orderSummary');
   var menu = document.getElementsByClassName("menulist");
   var restaurant = document.getElementById('list-title').innerHTML;
-  const userId = firebase.auth().currentUser.uid;
+  const currentUser = firebase.auth().currentUser;
 
   var orders = [];
   for (var i = 0; i < menu.length; i++) {
@@ -403,10 +403,15 @@ function chooz() {
     }
   }
 
-  firebase.database().ref('users/' + userId).set({
-        orders: orders
-      })
-
+  if (currentUser === undefined) {
+    // didn't log
+    
+  } else {
+    firebase.database().ref('users/' + currentUser.uid).set({
+            orders: orders
+          })
+  }
+  
   console.log(orders);
 }
 var showPopover = function (target) {
