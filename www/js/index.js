@@ -593,7 +593,7 @@ var updateFQ = function () {
           id.innerHTML = this.store_id;
           var button = document.createElement("BUTTON");
           button.type = "button";
-          var button_text = document.createTextNode("Click me");
+          var button_text = document.createTextNode("Chooz!");
 
           div.appendChild(s);
           div.appendChild(br);
@@ -609,7 +609,8 @@ var updateFQ = function () {
             }
           }(div));
 
-          infoWindow = new google.maps.InfoWindow({ map: map, content: div });
+          infoWindow = new google.maps.InfoWindow({ map: map });
+          infoWindow.setContent(div);
           infoWindow.open(map, this);
         });
 
