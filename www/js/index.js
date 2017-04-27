@@ -236,7 +236,7 @@ var initMap = function (enabled) {
     ]
   });
 
-  // var infoWindow = new google.maps.InfoWindow({ map: map });
+  var infoWindow = new google.maps.InfoWindow();
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
