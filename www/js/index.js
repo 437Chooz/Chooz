@@ -318,31 +318,75 @@ function menulist(title, id) {
     populateList(title, id);
   }
 };
-function openDetail(node) {
-  var div = document.getElementById('detail');
-  var p = document.createElement("p");
-  var br = document.createElement("br");
-  var price = node.id;
+// function openDetail(node) {
+//   var div = document.getElementById('detail');
+//   var p = document.createElement("p");
+//   var br = document.createElement("br");
+//   var price = node.id;
+//   var taxPrice = (1 + tax / 100) * price;
+//   var tipPrice = (price * tip / 100);
+//   console.log("tipPrice: " + tipPrice);
+//   var totalPrice = taxPrice + tipPrice;
+//   p.appendChild(document.createTextNode(node.id));
+//   p.appendChild(br);
+//   p.appendChild(document.createTextNode("tax applied: " + taxPrice));
+//   p.appendChild(br);
+//   p.appendChild(document.createTextNode("tip: " + tipPrice));
+//   p.appendChild(br);
+//   p.appendChild(document.createTextNode("Total: " + totalPrice));
+//   div.appendChild(p);
+//   document
+//     .getElementById('popover')
+//     .show(node);
+// }
+function showDetail(target) {
+  // var div = document.getElementById('popdetail');
+  // var p1 = document.createElement("p");
+  // var p2 = document.createElement("p");
+  // var p3 = document.createElement("p");
+  // var p4 = document.createElement("p");
+  // var br = document.createElement("br");
+  var price = finalPrice;
+  console.log("finalPrice: " + price);
   var taxPrice = (1 + tax / 100) * price;
+  console.log("tax: " + tax);
+  console.log("tax/100: " + tax/100);
+  console.log("taxPrice: " + taxPrice.toFixed(2));
   var tipPrice = (price * tip / 100);
+  console.log("tip: " + tip);
   console.log("tipPrice: " + tipPrice);
   var totalPrice = taxPrice + tipPrice;
-  p.appendChild(document.createTextNode(node.id));
-  p.appendChild(br);
-  p.appendChild(document.createTextNode("tax applied: " + taxPrice));
-  p.appendChild(br);
-  p.appendChild(document.createTextNode("tip: " + tipPrice));
-  p.appendChild(br);
-  p.appendChild(document.createTextNode("Total: " + totalPrice));
-  div.appendChild(p);
+
+  console.log("totalPrice: " + totalPrice);
+  // p1.appendChild(document.createTextNode(price));
+  // div.appendChild(p1);
+  // div.appendChild(br);
+  // p2.appendChild(document.createTextNode("tax applied: " + taxPrice));
+  // div.appendChild(p2);
+  // div.appendChild(br);
+  // p3.appendChild(document.createTextNode("tip: " + tipPrice));
+  // div.appendChild(p3);
+  // div.appendChild(br);
+  // p4.appendChild(document.createTextNode("Total: " + totalPrice));
+  // div.appendChild(p4);
+  var originalPrice = document.getElementById('originalPrice');
+  originalPrice.innerHTML = "original price: "+price;
+  var taxedPrice = document.getElementById('taxPrice');
+  taxedPrice.innerHTML = "taxed price: "+taxPrice.toFixed(2);
+  var tipedPrice = document.getElementById('tipPrice');
+  tipedPrice.innerHTML = "tip price: "+tipPrice.toFixed(2);
+  var totaledPrice = document.getElementById('totalPrice');
+  totaledPrice.innerHTML = "total price: "+totalPrice.toFixed(2);
+
   document
     .getElementById('popover')
-    .show(node);
+    .show(target);
 }
 finalPrice = 0.0;
 function cart(node) {
   // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
   var budgetbar = document.getElementById('budgetbar');
+
   console.log("price: " + node.value);
   var originalPrice = parseFloat(node.value);
   if (node.checked) {
@@ -355,20 +399,29 @@ function cart(node) {
   }
   budgetbar.value = Math.round(finalPrice);
   console.log("rounded price: " + budgetbar.value);
-  budgetbar.addEventListener("click", chooz(), false);
 }
 function populateList(title, id) {
   // Populate the list with menu items
+  var detail = document.getElementById("detail");
+  var button = document.createElement("ons-button");
+  button.className = "detailBtn"
+  button.id = "detailButton";
+  button.appendChild(document.createTextNode("DETAIL"));
+
+
   document.getElementById('list-title').innerHTML = title;
   var menuList = document.getElementById('menu-list');
-  var detail = document.createElement("ons-button");
-  detail.className = "detail"
-  detail.id = "detailButton";
-  detail.appendChild(document.createTextNode("DETAIL"));
-  detail.addEventListener('click', function (form) {
-    return chooz();
-  }(form));
-  menuList.appendChild(detail);
+  // var budgetbar = document.getElementById('budgetbar');
+  // var detail = document.createElement("ons-button");
+  // detail.className = "detail"
+  // detail.id = "detailButton";
+  // detail.appendChild(document.createTextNode("DETAIL"));
+  // detail.addEventListener("click", function(){
+  //   showDetail(detail);
+  // });
+  // budgetbar.appendChild(detail);
+
+  // menuList.appendChild(detail);
   for (var menu_type in venue_dict[id]) {
     var menu_header = document.createElement('ons-list-header');
     menu_header.innerText = menu_type;
@@ -392,7 +445,7 @@ function populateList(title, id) {
       // detail.id = menu.price;
       // detail.appendChild(document.createTextNode("DETAIL"));
       // form.appendChild(detail);
-      form.addEventListener('click', function (form) {
+      input.addEventListener('click', function (form) {
         return function () {
           console.log(this);
           cart(form.childNodes[0]);
@@ -405,6 +458,10 @@ function populateList(title, id) {
       menuList.appendChild(menu_item);
     }
   }
+  button.addEventListener("click", function () {
+    showDetail(this);
+  });
+  detail.appendChild(button);
 }
 
 function chooz() {
