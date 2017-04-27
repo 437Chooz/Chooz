@@ -534,3 +534,31 @@ h2{
     bottom: 50px;
   margin: 0 auto;
 }
+
+.orderBackground{
+    background: url('imgs/spoons.jpg') no-repeat; 
+    background-size: cover;   
+}
+.orderContainer{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url('imgs/sushi.jpg') no-repeat center center fixed; 
+    background-size: cover;
+}
+.summaryList{
+    background: transparent;
+    color: white;
+}
+.orderSummary{
+    color: white;
+    width: 80%;
+    max-height: 80%;
+    display: block;
+    margin: 0 auto;
+    margin-top: 50%;
+    border: 1px solid white;
+    background: transparent;
+}
