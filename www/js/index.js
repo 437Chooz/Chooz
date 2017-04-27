@@ -251,7 +251,7 @@ var initMap = function (enabled) {
         handleLocationError(true, infoWindow, map.getCenter());
       });
     } else {
-      // var geocoder = new google.maps.Geocoder();
+      var geocoder = new google.maps.Geocoder();
       var address = document.getElementById("zipcode").value;
       geocoder.geocode({ 'address': address }, function (results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
