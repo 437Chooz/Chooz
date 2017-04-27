@@ -380,7 +380,6 @@ function populateList(title, id) {
   }
 }
 
-
 function chooz() {
   var items = document.getElementById('items');
   var menu = [];
