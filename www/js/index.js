@@ -111,16 +111,67 @@ user.updatePassword(newPassword).then(function() {
 }
 
 function setting() {
-  const currentUser = firebase.auth().currentUser;
+  currentUser = firebase.auth().currentUser;
+  
+  var email = document.getElementById('email');
+  var settings_tip = document.getElementById('settings_tip');
+  var settings_budget = document.getElementById('settings_budget');
+  var settings_zipcode = document.getElementById('settings_zipcode');
 
-  if (currentUser === undefined) {
+  settings_tip.innerHTML = tip+"%";
+  settings_budget.innerHTML = "$"+budget;
+  settings_zipcode.innerHTML = zipcode;
+
+  if (currentUser === undefined || currentUser == null) {
     // didn't log in
+    email.innerHTML = "N/A";
   } else {
 
     firebase.database().ref('/users/' + currentUser.uid).once('value').then(function(snapshot) {
-      // var username = snapshot.val().username;
-      console.log(snapshot.val());
+      data = snapshot.val();
+
+      var settings_mid = document.getElementById("settingMid");
+
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          var order_date = data[key];
+
+          var p = document.createElement('p');
+          p.className = "pastOrder";
+          var st = document.createElement('strong');
+          st.innerHTML = key;
+          p.appendChild(st);
+          settings_mid.appendChild(p);
+
+          var list = document.createElement('ons-list');
+
+          for (var order_key in order_date) {
+            if (order_date.hasOwnProperty(order_key)) {
+
+              var order = order_date[order_key];
+              var menus = order["orders"];
+              var name = order["name"];
+
+              var restaurant_header = document.createElement('ons-list-header');
+              restaurant_header.innerText = name;
+
+              list.appendChild(restaurant_header);
+
+              for (var i=0; i<menus.length; i++) {
+                var menu_item = document.createElement('ons-list-item');
+                var html_text = "<div class='center'>" + menus[i]["menu"] + "</div><div class='right'>" + menus[i]["price"] + "</div>"
+                menu_item.innerHTML = html_text;
+                list.appendChild(menu_item);
+              }
+            }
+          }
+
+          settings_mid.appendChild(list);
+        }
+      }
     });
+
+    email.innerHTML = currentUser.email;
   }
 }
 
@@ -156,6 +207,7 @@ var tipNbudget = function () {
         this function does not go on until
         response returned
       */
+      zipcode = res.long_name;
       salesTax = getSalesTax(res.long_name);
     });
   } else {
@@ -383,12 +435,12 @@ function cart(checkbox) {
   var taxPrice = (1 + tax / 100) * finalPrice;
   // console.log("tax: " + tax);
   // console.log("tax/100: " + tax / 100);
-  console.log("taxPrice: " + taxPrice);
+  // console.log("taxPrice: " + taxPrice);
   var tipPrice = (finalPrice * tip / 100);
   // console.log("tip: " + tip);
-  console.log("tipPrice: " + tipPrice);
+  // console.log("tipPrice: " + tipPrice);
   var totalPrice = taxPrice + tipPrice;
-  console.log("totPrice: " + totalPrice.toFixed(2));
+  // console.log("totPrice: " + totalPrice.toFixed(2));
   totalPrice = (totalPrice).toFixed(2);
   // console.log("rounded: " + budgetbar.value);
   if(totalPrice>budget*1.00){
@@ -428,7 +480,7 @@ function populateList(title, id) {
       // console.log("tipPrice: " + tipPrice);
       var totalPrice = taxPrice + tipPrice;
 
-      console.log("totalPrice: " + totalPrice.toFixed(2));
+      // console.log("totalPrice: " + totalPrice.toFixed(2));
       if (totalPrice.toFixed(2) > budget * 1.00) {
         var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name.fontcolor("red") + "</div><div class='right'>" + newMenuPrice + "</div>"
       }
@@ -489,14 +541,13 @@ function chooz() {
 
 
     var newPostKey = firebase.database().ref().child(dateToday).push().key;
-    console.log(newPostKey);
 
     firebase.database().ref('users/' + currentUser.uid + '/'+ dateToday + '/' + newPostKey).update({
-          orders: orders
+          orders: orders,
+          name: restaurant
         })  
   }
 
-  console.log(orders);
 }
 var showPopover = function (target) {
   document
@@ -677,7 +728,7 @@ var updateFQ = function () {
           id.innerHTML = this.store_id;
           var button = document.createElement("BUTTON");
           button.type = "button";
-          var button_text = document.createTextNode("Chooz!");
+          var button_text = document.createTextNode("Menu");
 
           div.appendChild(s);
           div.appendChild(br);
