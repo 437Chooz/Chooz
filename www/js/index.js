@@ -388,8 +388,8 @@ function cart(checkbox) {
   // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
   var budgetbar = document.getElementById('budgetbar');
 
-  var originalPrice = parseFloat(checkbox.childNodes[0].value);
-  if (checkbox.childNodes[0].checked) {
+  var originalPrice = parseFloat(checkbox.value);
+  if (checkbox.checked) {
     finalPrice += originalPrice;
     console.log("finalPrice plus: " + finalPrice);
   }
@@ -448,7 +448,7 @@ function populateList(title, id) {
         var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name + "</div><div class='right'>" + newMenuPrice + "</div>"
       }
       menu_item.innerHTML += html_text;
-      var checkbox = menu_item.childNodes[0];
+      var checkbox = menu_item.childNodes[0].childNodes[0];
       checkbox.addEventListener('click', function(checkbox) {
         return function() {
           cart(checkbox);
