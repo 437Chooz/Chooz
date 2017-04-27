@@ -194,6 +194,78 @@
         </ons-page>
     </ons-template>
 
+    <ons-template id="calc.html">
+        <ons-page id="calc">
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button>Back</ons-back-button>
+                </div>
+                <div class="center">Calculator</div>
+                <div class="right">
+                    <ons-button class="settingBtn" id="settingButton" onclick="setting();">Setting</ons-button>
+                </div>
+            </ons-toolbar>
+            <div class="center" style="color:#FFFFFF; text-align:center; padding-top:30%; font-size:0.2in">
+                Menu is unfortunately not yet available for this venue. Please enter the price below.
+            </div>
+            <div id="calculator">
+                <!-- Screen and clear key -->
+                <div id="screen" class="top">
+                    <ons-button id="calculateButton" class="calculate" onclick="calc()">C</ons-button>
+                    <ons-button id="plusButton" class="plus" onclick="plus()">+</ons-button>
+                    <ons-input id="calculatePrice" type="text" class="screen"></ons-input>
+                </div>
+
+                <div id="output" class="keys">
+                    <ons-list-item id="">
+                        <div class='center'>
+                            Tax
+                        </div>
+                        <div id="tax" class='right'>
+                            Price
+                        </div>
+                    </ons-list-item>
+                    <ons-list-item id="">
+                        <div class='center'>
+                            Tip
+                        </div>
+                        <div id="Tip" class='right'>
+                            Price
+                        </div>
+                    </ons-list-item>
+                    <ons-list-item id="">
+                        <div class='center'>
+                            Total
+                        </div>
+                        <div id="total" class='right'>
+                            Price
+                        </div>
+                    </ons-list-item>
+                    <!-- operators and other keys -->
+                    <!--<span>7</span>
+                    <span>8</span>
+                    <span>9</span>
+                    <span class="operator">+</span>
+                    <span>4</span>
+                    <span>5</span>
+                    <span>6</span>
+                    <span class="operator">-</span>
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span class="operator">÷</span>
+                    <span>0</span>
+                    <span>.</span>
+                    <span class="eval">=</span>
+                    <span class="operator">x</span>-->
+                </div>
+            </div>
+
+            <!-- PrefixFree -->
+            <!--<script src="http://thecodeplayer.com/uploads/js/prefixfree-1.0.7.js" type="text/javascript" type="text/javascript"></script>-->
+        </ons-page>
+    </ons-template>
+
     <ons-template id="menulist.html">
         <ons-page id="menulist">
             <ons-toolbar>

@@ -319,13 +319,46 @@ function menulist(title, id) {
 
           populateList(title, id);
         }
+        else {
+          calcPrice=0.0;
+          document.querySelector('#myNav').pushPage('calc.html', { data: { title: 'Calc' } });
+        }
       }
     }
   } else {
     populateList(title, id);
   }
 };
+function plus(){
+  document.getElementById("calculatePrice").value="";
+  // var div = document.getElementById("screen");
+  // var input = document.createElement("ons-input");
+  // input.id = "new";
+  // input.type = "text";
+  // div.appendChild(input);
+  // calc();
+}
+function calc(){
+  var price = parseFloat(document.getElementById("calculatePrice").value);
+  calcPrice+=price;
+  console.log(price);
+  var taxP = (tax/100)*calcPrice;
+  console.log(taxP);
+  var tipP = (tip/100)*calcPrice;
+  console.log(tipP);
+  var totalP = (taxP+tipP+calcPrice);
+  console.log(totalP);
 
+  // var calculation = document.getElementById("output");
+  var calcTax = document.getElementById('tax');
+  calcTax.innerHTML = taxP.toFixed(2);
+  var calcTip = document.getElementById('Tip');
+  calcTip.innerHTML = tipP.toFixed(2);
+  var calcTotal = document.getElementById('total');
+  calcTotal.innerHTML = totalP.toFixed(2);
+  
+  // calculation.appendChild(totalitem);
+}
 function showDetail(target) {
   var price = finalPrice;
   // console.log("finalPrice: " + price);
@@ -654,7 +687,6 @@ var updateFQ = function () {
       var explore_response = JSON.parse(explore_xhttp.responseText).response;
 
       var items = explore_response.groups[0].items;
-
       for (var i = 0; i < venues.length; i++) {
         venues[i].marker.setMap(null);
       }
