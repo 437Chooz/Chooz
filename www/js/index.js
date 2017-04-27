@@ -99,14 +99,14 @@ var register = function () {
 
 function resetPassword() {
 
-var user = firebase.auth().currentUser;
-var newPassword = getASecureRandomPassword();
+  var user = firebase.auth().currentUser;
+  var newPassword = getASecureRandomPassword();
 
-user.updatePassword(newPassword).then(function() {
-  // Update successful.
-}, function(error) {
-  // An error happened.
-});
+  user.updatePassword(newPassword).then(function () {
+    // Update successful.
+  }, function (error) {
+    // An error happened.
+  });
 
 }
 
@@ -115,11 +115,11 @@ function setting() {
 }
 
 function logOut() {
-  firebase.auth().signOut().then(function() {
-  // Sign-out successful.
-}).catch(function(error) {
-  // An error happened.
-});
+  firebase.auth().signOut().then(function () {
+    // Sign-out successful.
+  }).catch(function (error) {
+    // An error happened.
+  });
 }
 
 /*
@@ -361,31 +361,34 @@ function cart(checkbox) {
     // console.log("finalPrice plus: " + finalPrice);
   }
   else {
-    if(finalPrice-originalPrice<0){
-      finalPrice=0;
+    if (finalPrice - originalPrice < 0) {
+      finalPrice = 0;
     }
-    else{
+    else {
       finalPrice -= originalPrice;
     }
     // console.log("finalPrice minus: " + finalPrice);
   }
-  
+
   var taxPrice = (1 + tax / 100) * finalPrice;
+  TaxPrice = taxPrice;
   // console.log("tax: " + tax);
   // console.log("tax/100: " + tax / 100);
   console.log("taxPrice: " + taxPrice);
   var tipPrice = (finalPrice * tip / 100);
+  TipPrice = tipPrice;
   // console.log("tip: " + tip);
   console.log("tipPrice: " + tipPrice);
   var totalPrice = taxPrice + tipPrice;
   console.log("totPrice: " + totalPrice.toFixed(2));
   totalPrice = (totalPrice).toFixed(2);
+  budgetPrice = totalPrice;
   // console.log("rounded: " + budgetbar.value);
-  if(totalPrice>budget*1.00){
+  if (totalPrice > budget * 1.00) {
     budgetbar.value = 100;
   }
-  else{
-    budgetbar.value = totalPrice*100/budget;
+  else {
+    budgetbar.value = totalPrice * 100 / budget;
   }
   // console.log("rounded price: " + budgetbar.value*100/budget);
 }
@@ -411,7 +414,7 @@ function populateList(title, id) {
       var menu_item = document.createElement('ons-list-item');
       var newMenuName = menu.name.replace(/ /g, "@");
       var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
-      
+
       var taxPrice = (1 + tax / 100) * menu.price;
       // console.log("taxPrice: " + taxPrice.toFixed(2));
       var tipPrice = (menu.price * tip / 100);
@@ -427,8 +430,8 @@ function populateList(title, id) {
       }
       menu_item.innerHTML += html_text;
       var checkbox = menu_item.childNodes[0].childNodes[0];
-      checkbox.addEventListener('click', function(checkbox) {
-        return function() {
+      checkbox.addEventListener('click', function (checkbox) {
+        return function () {
           cart(checkbox);
         }
       }(checkbox));
@@ -466,10 +469,21 @@ function chooz() {
 
     }
   }
-
+  var taxitem = document.createElement('ons-list-item');
+  var taxtext = "<div class='center'>" + "Tax" + "</div><div class='right'>" + TaxPrice.toFixed(2) + "</div>"
+  taxitem.innerHTML = taxtext;
+  orderSummary.appendChild(taxitem);
+  var tipitem = document.createElement('ons-list-item');
+  var tiptext = "<div class='center'>" + "Tip" + "</div><div class='right'>" + TipPrice.toFixed(2) + "</div>"
+  tipitem.innerHTML = tiptext;
+  orderSummary.appendChild(tipitem);
+  var totalitem = document.createElement('ons-list-item');
+  var totaltext = "<div class='center'>" + "Total" + "</div><div class='right'>" + budgetPrice + "</div>"
+  totalitem.innerHTML = totaltext;
+  orderSummary.appendChild(totalitem);
 
   const currentUser = firebase.auth().currentUser;
-  
+
   if (currentUser === undefined) {
     // didn't log in
   } else {
@@ -481,21 +495,26 @@ function chooz() {
     var newPostKey = firebase.database().ref().child(dateToday).push().key;
     console.log(newPostKey);
 
-    firebase.database().ref('users/' + currentUser.uid + '/'+ dateToday + '/' + newPostKey).update({
-          orders: orders
-        })  
+    firebase.database().ref('users/' + currentUser.uid + '/' + dateToday + '/' + newPostKey).update({
+      orders: orders
+    })
   }
 
   console.log(orders);
 }
 var showPopover = function (target) {
   document
-    .getElementById('popover')
+    .getElementById('warning')
     .show(target);
 };
 var hidePopover = function () {
   document
     .getElementById('popover')
+    .hide();
+};
+var hidePopover2 = function () {
+  document
+    .getElementById('warning')
     .hide();
 };
 function showModal() {
@@ -512,7 +531,7 @@ ons.ready(function () {
   document.addEventListener('init', function (event) {
     var page = event.target;
     console.log('event listener added', page);
-    
+
     if (page.id === 'register') {
       page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
       page.querySelector('#registerButton').onclick = function () {
@@ -546,7 +565,7 @@ ons.ready(function () {
       }
     };
     if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary') {
-      
+
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
@@ -555,15 +574,26 @@ ons.ready(function () {
       };
     }
     if (page.id === 'menulist') {
-      if(page.id==='menulist'){
+      if (page.id === 'menulist') {
         console.log('menu page');
-        finalPrice=0.0;
-        console.log("reset finalPrice: "+finalPrice);
+        finalPrice = 0.0;
+        console.log("reset finalPrice: " + finalPrice);
       }
       page.querySelector('#choozButton').onclick = function () {
+        if (budgetPrice > budget * 1.00) {
+          showPopover(this);
+        }
+        else {
+          document.querySelector('#myNav').pushPage('ordersummary.html', { data: { title: 'OrderSummary' } })
+            .then(function () {
+              chooz()
+            });
+        }
+      };
+      page.querySelector('#yesButton').onclick = function () {
         document.querySelector('#myNav').pushPage('ordersummary.html', { data: { title: 'OrderSummary' } })
           .then(function () {
-            chooz();
+            chooz()
           });
       };
     }

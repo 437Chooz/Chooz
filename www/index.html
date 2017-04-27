@@ -24,7 +24,6 @@
         };
         firebase.initializeApp(config);
     </script>
-    <!--<script src="lib/angular/angular.min.js"></script>-->
     <style>
         #map {
             height: 100%;
@@ -39,7 +38,6 @@
     </style>
 
     <script src="lib/onsen/js/onsenui.js"></script>
-    <!--    <script type="text/javascript" src="cordova.js"></script> Future Use for Cordova Plugins-->
     <script type="text/javascript" src="js/index.js"></script>
     <title>Chooz</title>
 </head>
@@ -226,28 +224,38 @@
                 </div>
             </ons-modal>
             <ons-popover direction="down" id="popover">
-            <div id="popdetail" style="padding: 10px; text-align: center;float:right;">
-                <!--<p class="detailStuff" id="detail">
-                            </p>-->
-                <p id="originalPrice">
-                    a
-                </p>
-                <p id="taxPrice">
-                    b
-                </p>
-                <p id="tipPrice">
-                   c 
-                </p>
-                <p id="totalPrice">
-                   d 
-                </p>
-                <p>
-                    <ons-button onclick="hidePopover()">Close</ons-button>
-                </p>
-            </div>
-        </ons-popover>
+                <div id="popdetail" style="padding: 10px; text-align: center;float:right;">
+                    <p id="originalPrice">
+                        a
+                    </p>
+                    <p id="taxPrice">
+                        b
+                    </p>
+                    <p id="tipPrice">
+                        c
+                    </p>
+                    <p id="totalPrice">
+                        d
+                    </p>
+                    <p>
+                        <ons-button onclick="hidePopover()">Close</ons-button>
+                    </p>
+                </div>
+            </ons-popover>
+            <ons-popover direction="up" id="warning">
+                <div id="warning" style="padding: 10px; text-align: center;float:right;">
+                    <p id="message">
+                        You are over your budget! Do you still want to Chooz?
+                    </p>
+
+                    <p>
+                        <ons-button id="yesButton">Yes</ons-button>
+                        <ons-button onclick="hidePopover2()">No</ons-button>
+                    </p>
+                </div>
+            </ons-popover>
         </ons-page>
-        
+
     </ons-template>
 
     <ons-template id="ordersummary.html">
@@ -261,20 +269,17 @@
             </div>
         </ons-toolbar>
         <ons-page id="">
-            
+
             <div class="orderContainer">
                 <div class="orderSummary">
                     <ons-list id="orderSummary" class="summaryList" style="color:white; background:transparent;">
                         <ons-list-header style="text-align:center; margin: 0 auto;padding: 0;">
-                            <i class="fa fa-spoon fa-3x" aria-hidden="true" style="color:white;margin:0 auto;text-align:center"></i>   
+                            <i class="fa fa-spoon fa-3x" aria-hidden="true" style="color:white;margin:0 auto;text-align:center"></i>
                         </ons-list-header>
-<!--                         <ons-list-item id="items" class="items">
-
-                        </ons-list-item>
- -->                    </ons-list>
+                    </ons-list>
                 </div>
             </div>
-            
+
         </ons-page>
     </ons-template>
 
