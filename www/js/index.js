@@ -158,8 +158,9 @@ var getSalesTax = function (zipcode) {
 
   xhr.addEventListener("readystatechange", function () {
     if (this.readyState === 4) {
-      var data = JSON.parse(this.responseText);
-      console.log(data);
+      console.log(this);
+      sales_data = JSON.parse(this.responseText);
+      console.log(sales_data);
     }
   });
 
@@ -232,7 +233,7 @@ var initMap = function (enabled) {
     ]
   });
 
-  var infoWindow = new google.maps.InfoWindow({ map: map });
+  // var infoWindow = new google.maps.InfoWindow({ map: map });
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -337,29 +338,12 @@ function populateList(title, id) {
     for (var i = 0; i < venue_dict[id][menu_type].length; i++) {
       var menu = venue_dict[id][menu_type][i];
       var menu_item = document.createElement('ons-list-item');
-      var form = document.createElement('form');
-      var input = document.createElement('input');
-      input.type = "checkbox";
-      input.id = [menu.name, menu.price];
-      input.className = "menulist";
-      form.appendChild(input);
-      form.appendChild(document.createTextNode(menu.name + " " + menu.price));
 
-      var detail = document.createElement("ons-button");
-      detail.className = "detail"
-      detail.id = menu.price;
-      detail.appendChild(document.createTextNode("DETAIL"));
-      form.appendChild(detail);
-      form.addEventListener('click', function (form) {
-        return function () {
-          console.log(this);
-          openDetail(form.childNodes[2]);
-          var div = document.getElementById('detail');
-          div.removeChild(div.childNodes[0]);
-        }
-      }(form));
-      menu_item.appendChild(form);
+      var newMenuName = menu.name.replace(/ /g, "@");
+      var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + menu.price + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+menu.price+"</div>"
+      menu_item.innerHTML += html_text;
       menuList.appendChild(menu_item);
+
     }
   }
 }
@@ -367,20 +351,23 @@ function populateList(title, id) {
 
 function chooz() {
   var items = document.getElementById('items');
-  var menu = [];
-  menu = document.getElementsByClassName("menulist");
-  var i;
+  var menu = document.getElementsByClassName("menulist");
+  var restaurant = document.getElementById('list-title').innerHTML;
 
-  var br = document.createElement("br");
-  for (i = 0; i < menu.length; i++) {
+  var orders = [];
+  for (var i = 0; i < menu.length; i++) {
     if (menu[i].checked) {
       var div = document.createElement("div");
-      var menuinfo = menu[i].id.replace(",", ": ");
-      console.log(menuinfo);
-      div.appendChild(document.createTextNode(menuinfo));
+      var menuInfo = menu[i].id.replace(/@/g, " ");
+      var menuPrice = menu[i].value;
+      div.appendChild(document.createTextNode(menuInfo + " : " + menuPrice));
       items.appendChild(div);
+
+      var order = {"menu": menuInfo, "price": menuPrice};
+      orders.push(order);
     }
   }
+  console.log(orders);
 }
 var showPopover = function (target) {
   document
@@ -559,7 +546,7 @@ var updateFQ = function () {
           id.innerHTML = this.store_id;
           var button = document.createElement("BUTTON");
           button.type = "button";
-          var button_text = document.createTextNode("Click me");
+          var button_text = document.createTextNode("Chooz!");
 
           div.appendChild(s);
           div.appendChild(br);
