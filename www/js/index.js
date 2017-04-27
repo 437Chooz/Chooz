@@ -397,6 +397,7 @@ function cart(checkbox) {
     console.log("finalPrice minus: " + finalPrice);
   }
   budgetbar.value = Math.round(finalPrice);
+  budgetbar.value = budgetbar.value*100/budget;
   console.log("rounded price: " + budgetbar.value*100/budget);
 }
 function populateList(title, id) {
