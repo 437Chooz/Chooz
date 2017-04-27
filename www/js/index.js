@@ -254,22 +254,22 @@ var initMap = function (enabled) {
       var geocoder = new google.maps.Geocoder();
       var address = document.getElementById("zipcode").value;
       geocoder.geocode({ 'address': address }, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-              var pos = {
-                lat: results[0].geometry.location.lat(),
-                lng: results[0].geometry.location.lng() 
-              };
+        if (status == google.maps.GeocoderStatus.OK) {
+          var pos = {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng()
+          };
 
-              map.setCenter(pos);
-              updateFQ();
+          map.setCenter(pos);
+          updateFQ();
 
-          } else {
-              alert("Request failed.")
-          }
+        } else {
+          alert("Request failed.")
+        }
       });
     }
   }
-    else {
+  else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
@@ -328,10 +328,43 @@ function populateList(title, id) {
 
     // console.log(venue_dict[id][menu_type]);
 
-    for (var i=0; i< venue_dict[id][menu_type].length; i++) {
+    for (var i = 0; i < venue_dict[id][menu_type].length; i++) {
       var menu = venue_dict[id][menu_type][i];
       var menu_item = document.createElement('ons-list-item');
-      menu_item.innerText = menu.name;
+      var form = document.createElement('form');
+      var input = document.createElement('input');
+      input.type = "checkbox";
+      input.id = [menu.name, menu.price];
+      input.className = "menulist";
+      form.appendChild(input);
+      form.appendChild(document.createTextNode(menu.name + " " + menu.price));
+      var detail = document.createElement("ons-button");
+      detail.className = "detail"
+      detail.id = menu.price;
+      detail.addEventListener('click', function () {
+        var price = [];
+        price = document.getElementsByTagName("ons-button");
+        var i;
+        for (i = 0; i < price.length; i++) {
+          console.log(price[i].id);
+          console.log(price[i]);
+          price[i].onclick = function () {
+            alert(price[i].id);
+          };
+          // if (price[i].checked) {
+          //   console.log("length: " + price[i]);
+          //   alert(price[i]);
+          // }
+        }
+
+        document
+          .getElementById('popover')
+          .show(this);
+      }, false);
+      detail.appendChild(document.createTextNode("DETAIL"));
+      form.appendChild(detail);
+      // menu_item.innerText = menu.name;
+      menu_item.appendChild(form);
       // FIXME:
       // menu price can be called with "menu.price"
       // menu description can be called with "menu.description"
@@ -340,60 +373,66 @@ function populateList(title, id) {
   }
 }
 
-function chooz() {    
-    var menu = [];
-    menu = document.getElementById("menulist");
-    console.log(document.getElementById("menulist")[0].checked+" "+document.forms[0]+" "+menu[0].checked+" "+menu.length);
-    var i;
-    for (i = 0; i < menu.length; i++) {
-        console.log("i: "+i);
-        if (menu[i].checked) {
-            console.log("inside checking");
-            console.log(menu[i].value);
-        }
+function chooz() {
+  var items = document.getElementById('items');
+  var menu = [];
+  menu = document.getElementsByClassName("menulist");
+  var i;
+  
+  var br = document.createElement("br");
+  for (i = 0; i < menu.length; i++) {
+    if (menu[i].checked) {
+      var div = document.createElement("div");
+      var menuinfo = menu[i].id.replace(",", ": ");
+      console.log(menuinfo);
+      div.appendChild(document.createTextNode(menuinfo));
+      // div.appendChild(br);
+      items.appendChild(div);
+      // items.appendChild(br);
     }
-    
+  }
+
 }
 var showPopover = function (target) {
-    document
-        .getElementById('popover')
-        .show(target);
+  document
+    .getElementById('popover')
+    .show(target);
 };
 var hidePopover = function () {
-    document
-        .getElementById('popover')
-        .hide();
+  document
+    .getElementById('popover')
+    .hide();
 };
 var showDialog = function (id) {
-    document
-        .getElementById(id)
-        .show();
+  document
+    .getElementById(id)
+    .show();
 };
 var fromTemplate = function () {
-    var dialog = document.getElementById('dialog-3');
+  var dialog = document.getElementById('dialog-3');
 
-    if (dialog) {
+  if (dialog) {
+    dialog.show();
+  }
+  else {
+    ons.createDialog('receipt.html')
+      .then(function (dialog) {
         dialog.show();
-    }
-    else {
-        ons.createDialog('receipt.html')
-            .then(function (dialog) {
-                dialog.show();
-            });
-    }
+      });
+  }
 };
 var hideDialog = function (id) {
-    document
-        .getElementById(id)
-        .hide();
+  document
+    .getElementById(id)
+    .hide();
 };
 
 function showModal() {
-    var modal = document.querySelector('ons-modal');
-    modal.show();
-    setTimeout(function () {
-        modal.hide();
-    }, 2000);
+  var modal = document.querySelector('ons-modal');
+  modal.show();
+  setTimeout(function () {
+    modal.hide();
+  }, 2000);
 }
 ons.ready(function () {
   console.log('ons.ready firing');
@@ -438,19 +477,29 @@ ons.ready(function () {
       }
     };
     if (page.id === 'search') {
-            page.querySelector('#searchButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
-                document.querySelector('#myNav').pushPage('menulist.html', { data: { title: 'Menulist' } })
-                    .then(function () {
-                        menulist();
-                    });
-            };
-            page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
-                document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
-                    .then(function () {
-                        setting();
-                    });
-            };
-        }
+      page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
+        document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
+          .then(function () {
+            setting();
+          });
+      };
+    }
+    if (page.id === 'menulist') {
+      page.querySelector('#settingButton').onclick = function () {
+        document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
+          .then(function () {
+            setting();
+          });
+      };
+    }
+    if (page.id === 'menulist') {
+      page.querySelector('#choozButton').onclick = function () {
+        document.querySelector('#myNav').pushPage('ordersummary.html', { data: { title: 'OrderSummary' } })
+          .then(function () {
+            chooz();
+          });
+      };
+    }
   });
 });
 
@@ -530,7 +579,7 @@ var updateFQ = function () {
             }),
             id: items[i].venue.id,
           }
-        console.log(venue.marker.title+": "+venue.id);
+        console.log(venue.marker.title + ": " + venue.id);
         venues.push(venue);
 
         infoWindow = new google.maps.InfoWindow({ map: map });
@@ -553,13 +602,13 @@ var updateFQ = function () {
           div.appendChild(button);
           div.appendChild(id);
 
-          div.addEventListener('click', function(div) {
-            return function() {
+          div.addEventListener('click', function (div) {
+            return function () {
               console.log(this);
               openMenuList(div.childNodes[0].innerHTML, div.childNodes[div.childNodes.length - 1].innerHTML);
 
             }
-            }(div));
+          }(div));
 
           infoWindow.setContent(div);
           infoWindow.open(map, this);
@@ -573,9 +622,9 @@ var updateFQ = function () {
 
 function openMenuList(title, id) {
   document.querySelector('#myNav').pushPage('menulist.html', { data: { title: 'Menulist' } })
-      .then(function () {
-          menulist(title, id);
-      });
+    .then(function () {
+      menulist(title, id);
+    });
 }
 
 function getRadius(lat1, lon1, lat2, lon2) {
@@ -610,4 +659,3 @@ function getRadius(lat1, lon1, lat2, lon2) {
 //     }
 //   });
 // });
-
