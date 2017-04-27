@@ -143,7 +143,7 @@ var tipNbudget = function () {
   tip = document.getElementById('tip').value;
   budget = document.getElementById('budget').value;
   console.log("tip&budget: " + tip + " " + budget);
-  var zipcode = document.getElementById('zipcode');
+  zipcode = document.getElementById('zipcode');
   var locationOff = document.body.contains(zipcode);
   var salesTax = 0;
 
@@ -379,15 +379,23 @@ function cart(checkbox) {
     }
     // console.log("finalPrice minus: " + finalPrice);
   }
-  budgetbar.value = Math.round(finalPrice);
-  if(budgetbar.value>budget){
+  
+  var taxPrice = (1 + tax / 100) * finalPrice;
+  // console.log("tax: " + tax);
+  // console.log("tax/100: " + tax / 100);
+  console.log("taxPrice: " + taxPrice);
+  var tipPrice = (finalPrice * tip / 100);
+  // console.log("tip: " + tip);
+  console.log("tipPrice: " + tipPrice);
+  var totalPrice = taxPrice + tipPrice;
+  console.log("totPrice: " + totalPrice.toFixed(2));
+  totalPrice = (totalPrice).toFixed(2);
+  // console.log("rounded: " + budgetbar.value);
+  if(totalPrice>budget*1.00){
     budgetbar.value = 100;
   }
   else{
-    budgetbar.value = budgetbar.value*100/budget;
-  }
-  if(budgetbar.value==100){
-    
+    budgetbar.value = totalPrice*100/budget;
   }
   // console.log("rounded price: " + budgetbar.value*100/budget);
 }
@@ -420,7 +428,7 @@ function populateList(title, id) {
       // console.log("tipPrice: " + tipPrice);
       var totalPrice = taxPrice + tipPrice;
 
-      // console.log("totalPrice: " + totalPrice.toFixed(2));
+      console.log("totalPrice: " + totalPrice.toFixed(2));
       if (totalPrice.toFixed(2) > budget * 1.00) {
         var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>" + menu.name.fontcolor("red") + "</div><div class='right'>" + newMenuPrice + "</div>"
       }
@@ -541,7 +549,7 @@ ons.ready(function () {
         document.querySelector('#myNav')
           .pushPage('search.html', { data: { title: 'search' } })
           .then(function () {
-            var enabled = (page.id === 'tipNbudgetW/location') ? true : false;
+            enabled = (page.id === 'tipNbudgetW/location') ? true : false;
             initMap(enabled);
             tipNbudget();
           });
@@ -568,6 +576,12 @@ ons.ready(function () {
             chooz();
           });
       };
+    }
+    if (page.id === 'setting') {
+      page.querySelector('#viewRestaurantButton').onclick = function () {
+        document.querySelector('#myNav')
+          .pushPage('search.html', { data: { title: 'search' } });
+      }
     }
   });
 });
