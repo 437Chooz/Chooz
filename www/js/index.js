@@ -112,14 +112,15 @@ function resetPassword() {
 
 function setting() {
   currentUser = firebase.auth().currentUser;
-  
+  console.log("user: "+currentUser);
+
   var email = document.getElementById('email');
   var settings_tip = document.getElementById('settings_tip');
   var settings_budget = document.getElementById('settings_budget');
   var settings_zipcode = document.getElementById('settings_zipcode');
 
-  settings_tip.innerHTML = tip+"%";
-  settings_budget.innerHTML = "$"+budget;
+  settings_tip.innerHTML = tip + "%";
+  settings_budget.innerHTML = "$" + budget;
   settings_zipcode.innerHTML = zipcode;
 
   if (currentUser === undefined || currentUser == null) {
@@ -127,15 +128,16 @@ function setting() {
     email.innerHTML = "N/A";
   } else {
 
-    firebase.database().ref('/users/' + currentUser.uid).once('value').then(function(snapshot) {
+    firebase.database().ref('/users/' + currentUser.uid).once('value').then(function (snapshot) {
       data = snapshot.val();
 
       var settings_mid = document.getElementById("settingMid");
 
       for (var key in data) {
+        console.log("key: "+key);
         if (data.hasOwnProperty(key)) {
           var order_date = data[key];
-
+          console.log("date: "+order_date);
           var p = document.createElement('p');
           p.className = "pastOrder";
           var st = document.createElement('strong');
@@ -157,7 +159,7 @@ function setting() {
 
               list.appendChild(restaurant_header);
 
-              for (var i=0; i<menus.length; i++) {
+              for (var i = 0; i < menus.length; i++) {
                 var menu_item = document.createElement('ons-list-item');
                 var html_text = "<div class='center'>" + menus[i]["menu"] + "</div><div class='right'>" + menus[i]["price"] + "</div>"
                 menu_item.innerHTML = html_text;
@@ -165,7 +167,6 @@ function setting() {
               }
             }
           }
-
           settings_mid.appendChild(list);
         }
       }
@@ -382,7 +383,7 @@ function menulist(title, id) {
           populateList(title, id);
         }
         else {
-          calcPrice=0.0;
+          calcPrice = 0.0;
           document.querySelector('#myNav').pushPage('calc.html', { data: { title: 'Calc' } });
         }
       }
@@ -391,18 +392,18 @@ function menulist(title, id) {
     populateList(title, id);
   }
 };
-function plus(){
-  document.getElementById("calculatePrice").value="";
+function plus() {
+  document.getElementById("calculatePrice").value = "";
 }
-function calc(){
+function calc() {
   var price = parseFloat(document.getElementById("calculatePrice").value);
-  calcPrice+=price;
+  calcPrice += price;
   console.log(price);
-  var taxP = (tax/100)*calcPrice;
+  var taxP = (tax / 100) * calcPrice;
   console.log(taxP);
-  var tipP = (tip/100)*calcPrice;
+  var tipP = (tip / 100) * calcPrice;
   console.log(tipP);
-  var totalP = (taxP+tipP+calcPrice);
+  var totalP = (taxP + tipP + calcPrice);
   console.log(totalP);
 
   // var calculation = document.getElementById("output");
@@ -412,7 +413,7 @@ function calc(){
   calcTip.innerHTML = tipP.toFixed(2);
   var calcTotal = document.getElementById('total');
   calcTotal.innerHTML = totalP.toFixed(2);
-  
+
   // calculation.appendChild(totalitem);
 }
 function showDetail(target) {
@@ -574,10 +575,11 @@ function chooz() {
 
     var newPostKey = firebase.database().ref().child(dateToday).push().key;
 
-    firebase.database().ref('users/' + currentUser.uid + '/'+ dateToday + '/' + newPostKey).update({
-          orders: orders,
-          name: restaurant
-        })  
+    firebase.database().ref('users/' + currentUser.uid + '/' + dateToday + '/' + newPostKey).update({
+      orders: orders,
+      name: restaurant
+    });
+    console.log('users/' + currentUser.uid + '/' + dateToday + '/' + newPostKey);
   }
 
 }
@@ -643,10 +645,11 @@ ons.ready(function () {
           });
       }
     };
-    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary' ||page.id==='calc') {
+    if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary' || page.id === 'calc') {
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
+            // console.log("setting fn");
             setting();
           });
       };
