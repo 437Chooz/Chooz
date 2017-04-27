@@ -325,7 +325,7 @@ function openDetail(node) {
   var price = node.id;
   var taxPrice = (1 + tax / 100) * price;
   var tipPrice = (price * tip / 100);
-  console.log("tipPrice: "+tipPrice);
+  console.log("tipPrice: " + tipPrice);
   var totalPrice = taxPrice + tipPrice;
   p.appendChild(document.createTextNode(node.id));
   p.appendChild(br);
@@ -339,28 +339,36 @@ function openDetail(node) {
     .getElementById('popover')
     .show(node);
 }
-finalPrice=0.0;
-function cart(node){
+finalPrice = 0.0;
+function cart(node) {
   // <ons-progress-bar id="budgetbar" value="0"></ons-progress-bar>
   var budgetbar = document.getElementById('budgetbar');
-  console.log("price: "+ node.value);
+  console.log("price: " + node.value);
   var originalPrice = parseFloat(node.value);
-  if(node.checked){
-    finalPrice +=originalPrice;
-    console.log("finalPrice plus: "+finalPrice);
+  if (node.checked) {
+    finalPrice += originalPrice;
+    console.log("finalPrice plus: " + finalPrice);
   }
-  else{
-    finalPrice -=originalPrice;
-    console.log("finalPrice minus: "+finalPrice);
+  else {
+    finalPrice -= originalPrice;
+    console.log("finalPrice minus: " + finalPrice);
   }
   budgetbar.value = Math.round(finalPrice);
-  console.log("rounded price: "+budgetbar.value);
+  console.log("rounded price: " + budgetbar.value);
+  budgetbar.addEventListener("click", chooz(), false);
 }
 function populateList(title, id) {
   // Populate the list with menu items
   document.getElementById('list-title').innerHTML = title;
   var menuList = document.getElementById('menu-list');
-
+  var detail = document.createElement("ons-button");
+  detail.className = "detail"
+  detail.id = "detailButton";
+  detail.appendChild(document.createTextNode("DETAIL"));
+  detail.addEventListener('click', function (form) {
+    return chooz();
+  }(form));
+  menuList.appendChild(detail);
   for (var menu_type in venue_dict[id]) {
     var menu_header = document.createElement('ons-list-header');
     menu_header.innerText = menu_type;
@@ -379,18 +387,18 @@ function populateList(title, id) {
       form.appendChild(input);
       form.appendChild(document.createTextNode(menu.name + " " + menu.price));
 
-      var detail = document.createElement("ons-button");
-      detail.className = "detail"
-      detail.id = menu.price;
-      detail.appendChild(document.createTextNode("DETAIL"));
-      form.appendChild(detail);
+      // var detail = document.createElement("ons-button");
+      // detail.className = "detail"
+      // detail.id = menu.price;
+      // detail.appendChild(document.createTextNode("DETAIL"));
+      // form.appendChild(detail);
       form.addEventListener('click', function (form) {
         return function () {
           console.log(this);
           cart(form.childNodes[0]);
-          openDetail(form.childNodes[2]);
-          var div = document.getElementById('detail');
-          div.removeChild(div.childNodes[0]);
+          // openDetail(form.childNodes[2]);
+          // var div = document.getElementById('detail');
+          // div.removeChild(div.childNodes[0]);
         }
       }(form));
       menu_item.appendChild(form);
