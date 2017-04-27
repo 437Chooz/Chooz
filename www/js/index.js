@@ -97,6 +97,31 @@ var register = function () {
   }
 };
 
+function resetPassword() {
+
+var user = firebase.auth().currentUser;
+var newPassword = getASecureRandomPassword();
+
+user.updatePassword(newPassword).then(function() {
+  // Update successful.
+}, function(error) {
+  // An error happened.
+});
+
+}
+
+function setting() {
+
+}
+
+function logOut() {
+  firebase.auth().signOut().then(function() {
+  // Sign-out successful.
+}).catch(function(error) {
+  // An error happened.
+});
+}
+
 /*
   get zipcode, tip, and budget amount
   from user input, and do calculations
