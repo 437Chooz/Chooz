@@ -232,7 +232,7 @@ var initMap = function (enabled) {
     ]
   });
 
-  // var infoWindow = new google.maps.InfoWindow({ map: map });
+  var infoWindow = new google.maps.InfoWindow({ map: map });
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -314,7 +314,15 @@ function menulist(title, id) {
     populateList(title, id);
   }
 };
-
+function openDetail(node) {
+  var div = document.getElementById('detail');
+  var p = document.createElement("p");
+  p.appendChild(document.createTextNode(node.id));
+  div.appendChild(p);
+  document
+    .getElementById('popover')
+    .show(node);
+}
 function populateList(title, id) {
   // Populate the list with menu items
   document.getElementById('list-title').innerHTML = title;
@@ -326,8 +334,6 @@ function populateList(title, id) {
 
     menuList.appendChild(menu_header);
 
-    // console.log(venue_dict[id][menu_type]);
-
     for (var i = 0; i < venue_dict[id][menu_type].length; i++) {
       var menu = venue_dict[id][menu_type][i];
       var menu_item = document.createElement('ons-list-item');
@@ -338,47 +344,33 @@ function populateList(title, id) {
       input.className = "menulist";
       form.appendChild(input);
       form.appendChild(document.createTextNode(menu.name + " " + menu.price));
+
       var detail = document.createElement("ons-button");
       detail.className = "detail"
       detail.id = menu.price;
-      detail.addEventListener('click', function () {
-        var price = [];
-        price = document.getElementsByTagName("ons-button");
-        var i;
-        for (i = 0; i < price.length; i++) {
-          console.log(price[i].id);
-          console.log(price[i]);
-          price[i].onclick = function () {
-            alert(price[i].id);
-          };
-          // if (price[i].checked) {
-          //   console.log("length: " + price[i]);
-          //   alert(price[i]);
-          // }
-        }
-
-        document
-          .getElementById('popover')
-          .show(this);
-      }, false);
       detail.appendChild(document.createTextNode("DETAIL"));
       form.appendChild(detail);
-      // menu_item.innerText = menu.name;
+      form.addEventListener('click', function (form) {
+        return function () {
+          console.log(this);
+          openDetail(form.childNodes[2]);
+          var div = document.getElementById('detail');
+          div.removeChild(div.childNodes[0]);
+        }
+      }(form));
       menu_item.appendChild(form);
-      // FIXME:
-      // menu price can be called with "menu.price"
-      // menu description can be called with "menu.description"
       menuList.appendChild(menu_item);
     }
   }
 }
+
 
 function chooz() {
   var items = document.getElementById('items');
   var menu = [];
   menu = document.getElementsByClassName("menulist");
   var i;
-  
+
   var br = document.createElement("br");
   for (i = 0; i < menu.length; i++) {
     if (menu[i].checked) {
@@ -386,12 +378,9 @@ function chooz() {
       var menuinfo = menu[i].id.replace(",", ": ");
       console.log(menuinfo);
       div.appendChild(document.createTextNode(menuinfo));
-      // div.appendChild(br);
       items.appendChild(div);
-      // items.appendChild(br);
     }
   }
-
 }
 var showPopover = function (target) {
   document
@@ -403,30 +392,6 @@ var hidePopover = function () {
     .getElementById('popover')
     .hide();
 };
-var showDialog = function (id) {
-  document
-    .getElementById(id)
-    .show();
-};
-var fromTemplate = function () {
-  var dialog = document.getElementById('dialog-3');
-
-  if (dialog) {
-    dialog.show();
-  }
-  else {
-    ons.createDialog('receipt.html')
-      .then(function (dialog) {
-        dialog.show();
-      });
-  }
-};
-var hideDialog = function (id) {
-  document
-    .getElementById(id)
-    .hide();
-};
-
 function showModal() {
   var modal = document.querySelector('ons-modal');
   modal.show();
@@ -583,7 +548,6 @@ var updateFQ = function () {
         venues.push(venue);
 
         infoWindow = new google.maps.InfoWindow();
-
         venue.marker.addListener('click', function () {
 
           var div = document.createElement("DIV");
@@ -595,7 +559,7 @@ var updateFQ = function () {
           id.innerHTML = this.store_id;
           var button = document.createElement("BUTTON");
           button.type = "button";
-          var button_text = document.createTextNode("Chooz!");
+          var button_text = document.createTextNode("Click me");
 
           div.appendChild(s);
           div.appendChild(br);

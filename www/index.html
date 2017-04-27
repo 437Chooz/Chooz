@@ -146,7 +146,7 @@
                                 <input type="text" class="tipNbudget" id="budget"><label>Budget</label>
                             </div>
                             <br>
-                            <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Get me Restaurants!</ons-button>
+                            <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Let's Chooz</ons-button>
                         </form>
                     </div>
                 </div>
@@ -166,6 +166,7 @@
                 <div class="loginMid">
                     <div class="numContainer">
                         <h2> Put those numbers in! </h2>
+                        <div id="map"></div>
                         <div class="question">
                             <input type="text" class="zipcode" id="zipcode"><label>Zip Code</label>
                         </div>
@@ -176,7 +177,7 @@
                             <input type="text" class="tipNbudget" id="budget"><label>Budget</label>
                         </div>
                         <br>
-                        <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Get me Restaurants!</ons-button>
+                        <ons-button class="tipNbudgetConfirm" id="confirm" onclick="myNav.pushPage('search.html');">Let's Chooz</ons-button>
                     </div>
 
                 </div>
@@ -220,8 +221,8 @@
 
                     </ons-list>
                     <ons-popover direction="up" id="popover">
-                        <div id="detail" style="padding: 10px; text-align: center;">
-                            <p>
+                        <div style="padding: 10px; text-align: center;">
+                            <p id="detail">
 
                             </p>
                             <p>
@@ -336,30 +337,6 @@
             </ons-modal>
         </ons-page>
     </ons-template>
-
-    <ons-template id="receipt.html">
-        <ons-dialog id="dialog-3">
-            <div style="text-align: center; padding: 10px;">
-                <p>
-                    <ons-list-item>
-                        <div id="menuname" class="center">
-                            Menu Name
-                        </div>
-
-                        <div id="price" class="center">
-                            Price
-                        </div>
-                    </ons-list-item>
-                    <p>
-
-                        <p>
-                            <ons-button onclick="hideDialog('dialog-3')">Close</ons-button>
-                        </p>
-            </div>
-        </ons-dialog>
-    </ons-template>
-
-
 </body>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD7m5lD3fCCz61cJY6McEyp3tv8WdL3Gg"
     type="text/javascript"></script>
