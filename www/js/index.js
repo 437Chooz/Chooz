@@ -371,7 +371,7 @@ function showDetail(target) {
   // p4.appendChild(document.createTextNode("Total: " + totalPrice));
   // div.appendChild(p4);
   var originalPrice = document.getElementById('originalPrice');
-  originalPrice.innerHTML = "original price: " + price;
+  originalPrice.innerHTML = "original price: " + price.toFixed(2);
   var taxedPrice = document.getElementById('taxPrice');
   taxedPrice.innerHTML = "taxed price: " + taxPrice.toFixed(2);
   var tipedPrice = document.getElementById('tipPrice');
