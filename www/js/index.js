@@ -372,27 +372,29 @@ function populateList(title, id) {
       var menu_item = document.createElement('ons-list-item');
 
       var newMenuName = menu.name.replace(/ /g, "@");
-      var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + menu.price + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+menu.price+"</div>"
+      var newMenuPrice = (menu.price === undefined) ? "N/A" : menu.price;
+      var html_text = "<div class='left'><ons-input type='checkbox' input-id='check-1' class='menulist' id=" + newMenuName + " value=" + newMenuPrice + "></ons-input></div><div class='center'>"+menu.name+"</div><div class='right'>"+newMenuPrice+"</div>"
       menu_item.innerHTML += html_text;
       menuList.appendChild(menu_item);
-
     }
   }
 }
 
 function chooz() {
-  var items = document.getElementById('items');
+  var orderSummary = document.getElementById('orderSummary');
   var menu = document.getElementsByClassName("menulist");
   var restaurant = document.getElementById('list-title').innerHTML;
 
   var orders = [];
   for (var i = 0; i < menu.length; i++) {
     if (menu[i].checked) {
-      var div = document.createElement("div");
+      var menu_item = document.createElement('ons-list-item');
       var menuInfo = menu[i].id.replace(/@/g, " ");
       var menuPrice = menu[i].value;
-      div.appendChild(document.createTextNode(menuInfo + " : " + menuPrice));
-      items.appendChild(div);
+      var html_text = "<div class='center'>"+menuInfo+"</div><div class='right'>"+menuPrice+"</div>"
+
+      menu_item.innerHTML = html_text;
+      orderSummary.appendChild(menu_item);
 
       var order = {"menu": menuInfo, "price": menuPrice};
       orders.push(order);
