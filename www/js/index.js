@@ -111,7 +111,17 @@ user.updatePassword(newPassword).then(function() {
 }
 
 function setting() {
+  const currentUser = firebase.auth().currentUser;
 
+  if (currentUser === undefined) {
+    // didn't log in
+  } else {
+
+    firebase.database().ref('/users/' + currentUser.uid).once('value').then(function(snapshot) {
+      // var username = snapshot.val().username;
+      console.log(snapshot.val());
+    });
+  }
 }
 
 function logOut() {
