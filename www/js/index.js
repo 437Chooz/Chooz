@@ -115,7 +115,8 @@ var register = function () {
 var tipNbudget = function () {
   console.log('tip n budget function');
   // Location();
-
+  tip = document.getElementById('tip').value;
+  console.log(tip);
   var zipcode = document.getElementById('zipcode');
   var locationOff = document.body.contains(zipcode);
   var salesTax = 0;
@@ -158,8 +159,11 @@ var getSalesTax = function (zipcode) {
 
   xhr.addEventListener("readystatechange", function () {
     if (this.readyState === 4) {
-      var data = JSON.parse(this.responseText);
-      console.log(data);
+      salesdata = JSON.parse(this.responseText);
+      tax = parseFloat(salesdata.charAt(18) + salesdata.charAt(19) + salesdata.charAt(20) + salesdata.charAt(21) + salesdata.charAt(22));
+      console.log(tax);
+      console.log(salesdata);
+      return tax;
     }
   });
 
@@ -317,7 +321,19 @@ function menulist(title, id) {
 function openDetail(node) {
   var div = document.getElementById('detail');
   var p = document.createElement("p");
+  var br = document.createElement("br");
+  var price = node.id;
+  var taxPrice = (1 + tax / 100) * price;
+  var tipPrice = (price * tip / 100);
+  console.log("tipPrice: "+tipPrice);
+  var totalPrice = taxPrice + tipPrice;
   p.appendChild(document.createTextNode(node.id));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("tax applied: " + taxPrice));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("tip: " + tipPrice));
+  p.appendChild(br);
+  p.appendChild(document.createTextNode("Total: " + totalPrice));
   div.appendChild(p);
   document
     .getElementById('popover')
