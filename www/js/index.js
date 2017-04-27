@@ -331,12 +331,6 @@ function menulist(title, id) {
 };
 function plus(){
   document.getElementById("calculatePrice").value="";
-  // var div = document.getElementById("screen");
-  // var input = document.createElement("ons-input");
-  // input.id = "new";
-  // input.type = "text";
-  // div.appendChild(input);
-  // calc();
 }
 function calc(){
   var price = parseFloat(document.getElementById("calculatePrice").value);
@@ -589,7 +583,6 @@ ons.ready(function () {
       }
     };
     if (page.id === 'search' || page.id === 'menulist' || page.id === 'ordersummary') {
-
       page.querySelector('#settingButton').onclick = function () { //FIX ME: temporary trigger button as Setting. modify this to trigger when marker is clicked
         document.querySelector('#myNav').pushPage('setting.html', { data: { title: 'Setting' } })
           .then(function () {
